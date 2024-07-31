@@ -1,6 +1,6 @@
 # Description: Menu options for sprint programs
-# Author Study Group 5
-# Date: 2024-Jun-14 to 
+# Author Robot Group 3
+# Date: 2024-Jul-31 to 
 
 
 # import libraries
