@@ -2,16 +2,17 @@
 # Use the following to complete the rest of the summary data for the end of the report.
  
 # Description:
-# Author:
-# Date(s):
+# Author: Robot Group 3
+# Date(s): Jul 31 2024 - 
  
  
-
-
 #define libraries
 import datetime
-import utility_module as FV  
+import display_handler as FV  
 
+#definte file paths
+ExpensesFile = "expenses.dat"
+RevenueFile = "revenue.dat"
 
 
 def CalculateProfit():
@@ -41,7 +42,7 @@ def CalculateProfit():
     ExpensesAcc = 0
 
     # Open the data file
-    with open("Expenses.dat", "r") as f:
+    with open(ExpensesFile, "r") as f:
         # Process each line (record) in the file in a loop
         for ExpRecord in f:
             # Read the record and grab values from the list
@@ -93,7 +94,7 @@ def CalculateProfit():
     RevenueAcc = 0
 
     # Open the data file
-    with open("Revenues.dat", "r") as f:
+    with open(RevenueFile, "r") as f:
         # Process each line (record) in the file in a loop
         for RevRecord in f:
             # Read the record and grab values from the list
