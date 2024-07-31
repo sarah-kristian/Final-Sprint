@@ -4,6 +4,7 @@
 from datetime import datetime
 
 
+
 def pc_add_dsp(postal_code):
 # Returns a postal code in this format: A1A 1A1
     formatted_pc = (f"{postal_code[0]}{postal_code[1]}{postal_code[2]} {postal_code[3]}{postal_code[4]}{postal_code[5]}")
@@ -37,10 +38,17 @@ def dollar_dsp_wl(value, label):
     return f"{label:<22s}{formatted_value:>10}".strip()
 
 
-def dollar_dsp(value):     
-# Returns a float as a formatted string, no label
-    formatted_value = f"${value:,.2f}"
-    return formatted_value
+# def dollar_dsp(value):     
+# # Returns a float as a formatted string, no label
+#     formatted_value = f"${value:,.2f}"
+#     return formatted_value
+
+
+
+def FDollar2(DollarValue):
+    # Function will accept a value and format it to $#,###.##.
+    DollarValueStr = "${:,.2f}".format(DollarValue)
+    return DollarValueStr
 
 
 def percent_dsp_wl(value, label):     
@@ -59,18 +67,23 @@ def date_yyyy_dsp(date):
     return date
 
 
-def date_dd_Mon_dsp(date):
-# Function will accept a value and format it to dd-Mon-yy.
-    date = datetime.strftime(date, "%d-%b-%y")
-    return date
+# def date_dd_Mon_dsp(date):
+# # Function will accept a value and format it to dd-Mon-yy.
+#     date = datetime.strftime(date, "%d-%b-%y")
+#     return date
+
+
+def FDateM(DateValue):
+    # Function will accept a value and format it to dd-Mon-yy.
+    DateValueStr = DateValue.strftime("%d-%b-%y")
+    return DateValueStr
+
 
 
 def date_dsp(date):
     # Function will accept a value and format it to Day, Month dd, yyyy.
     date = datetime.strftime(date, "%A, %B %d, %Y")
     return date
-
-
         #for key, value in user_contact.items():
         #    print(f"{key}: {value}")
 
