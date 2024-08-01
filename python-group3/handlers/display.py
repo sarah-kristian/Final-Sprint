@@ -1,4 +1,7 @@
-# display_handler.py
+# display.py
+
+# Description: Library of functions to display formatted data
+# Author: Sarah Perry
 
 # import libraries
 from datetime import datetime

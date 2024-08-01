@@ -1,12 +1,12 @@
 # Description: Menu options for sprint programs
 # Author Robot Group 3
-# Date: 2024-Jul-31 to 
+# Date: 2024-Jul-31 to 2024-Aug-07
 
 
 # import libraries
-from datetime import datetime
-import time
-from utility_module import clear_screen
+from handlers.utility import clear_screen
+from profit import CalculateProfit as print_profit_listing
+from HABEmployee import create_new_account
 
 #define constants:
 MENU = """
@@ -35,11 +35,6 @@ MENU = """
 ############################################################################################################
 
 
-def create_new_account():
-    new_account = "This will be employee info"
-
-    return new_account
-
 def update_revenues():
     new_revenue = "This will be revenue info"
 
@@ -60,10 +55,6 @@ def record_employee_payment():
 
     return employee_payment
 
-def print_profit_listing():
-    profit_list = "This will be profit listing"
-
-    return profit_list
 
 def print_driver_listing():
     driver_list = "This will be driver listing"

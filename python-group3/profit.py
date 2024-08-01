@@ -8,11 +8,11 @@
  
 #define libraries
 import datetime
-import display_handler as FV  
+import handlers.display as FV  
 
 #define file paths
-ExpensesFile = 'python-group3/expenses.dat'
-RevenueFile = 'python-group3/revenue.dat'
+ExpensesFile = 'python-group3/data_files/expenses.dat'
+RevenueFile = 'python-group3/data_files/revenue.dat'
 
 
 def CalculateProfit():
@@ -20,10 +20,13 @@ def CalculateProfit():
     print()
     print("This program will generate a profit report for a specified date range.")
     print()
+
+    # For testing purposes, use the following hard-coded dates
+    StartDate = "2022-01-01"
+    EndDate = "2022-03-05"
+
     #StartDate = input("Enter the start date (YYYY-MM-DD): ")
     #EndDate = input("Enter the end date (YYYY-MM-DD): ")
-    StartDate = "2022-01-01"
-    EndDate = "2024-07-31"
 
 
     # Convert input dates to datetime objects
@@ -143,5 +146,5 @@ def CalculateProfit():
 
 
 
-
-CalculateProfit()
+if __name__ == "__main__":
+    CalculateProfit()

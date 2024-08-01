@@ -1,5 +1,8 @@
 # utility_module.py
 
+# Description: Library of utility functions
+# Author: Sarah Perry
+
 import os
 import time
 

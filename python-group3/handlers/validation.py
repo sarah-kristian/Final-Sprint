@@ -1,4 +1,7 @@
-# input_handler.py
+# validation.py
+
+# Description: Library of functions to validate user input
+# Author: Sarah Perry
 
 
 # import libraries

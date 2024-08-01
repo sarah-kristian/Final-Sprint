@@ -7,7 +7,7 @@ import time
 
 
 # define global variables
-EmployeeFile = "Employees.dat"
+EmployeeFile = 'python-group3/data_files/employees.dat'
 
 # define functions
 
@@ -28,6 +28,8 @@ def ValidatePostal(PostalCode):
 
 
 def create_new_account():
+
+    # Welcome message
     print("-----------------------------------------------------------------------")
     print("    __  _____    ____     ______           _ ")
     print("   / / / /   |  / __ )   /_  __/___ __  __(_)")
@@ -99,6 +101,13 @@ def create_new_account():
 
         # Writing to data file 
 
+        Message = "Saving new driver. Please stand by..."
+        for _ in range(3):  
+            print(Message, end='\r')
+            time.sleep(1)  
+            sys.stdout.write('\033[2K\r')
+            time.sleep(.7)
+
         f = open(EmployeeFile, "a")
 
         f.write(f"{DriverNumber},{DriverFirstName},{DriverSurname},{StreetAdd},{City},{PostalCode},{PhoneNumber},"
@@ -109,7 +118,11 @@ def create_new_account():
 
         AdditionalEntry = input("Would you like to enter another new employee into the system (Y/N)?: ").upper()
         if AdditionalEntry == "N":
+            print("\nThank you for using the system. You will now be returned to the main menu.")
             break
+
+
+
 
 
 if __name__ == "__main__":
