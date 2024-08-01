@@ -10,15 +10,21 @@
 import datetime
 import display_handler as FV  
 
-#definte file paths
-ExpensesFile = "expenses.dat"
-RevenueFile = "revenue.dat"
+#define file paths
+ExpensesFile = 'python-group3/expenses.dat'
+RevenueFile = 'python-group3/revenue.dat'
 
 
 def CalculateProfit():
     # Get the start and end dates for the report
-    StartDate = input("Enter the start date (YYYY-MM-DD): ")
-    EndDate = input("Enter the end date (YYYY-MM-DD): ")
+    print()
+    print("This program will generate a profit report for a specified date range.")
+    print()
+    #StartDate = input("Enter the start date (YYYY-MM-DD): ")
+    #EndDate = input("Enter the end date (YYYY-MM-DD): ")
+    StartDate = "2022-01-01"
+    EndDate = "2024-07-31"
+
 
     # Convert input dates to datetime objects
     StartDate_dt = datetime.datetime.strptime(StartDate, '%Y-%m-%d')
@@ -134,5 +140,8 @@ def CalculateProfit():
     print()
     print()
     print()
+
+
+
 
 CalculateProfit()
