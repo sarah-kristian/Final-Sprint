@@ -4,20 +4,15 @@
 import datetime
 import sys
 import time
-
+import handlers.utility as util
+import handlers.validation as val
 
 # define global variables
 EmployeeFile = 'python-group3/data_files/employees.dat'
 HeaderMsg = "Employee Registration"
 
+
 # define functions
-
-def ValidateDate(date_text):
-    try:
-        datetime.datetime.strptime(date_text, '%Y-%m-%d')
-        return True
-    except:
-        return False
     
 def ValidatePostal(PostalCode):
     for char in PostalCode:
@@ -26,14 +21,6 @@ def ValidatePostal(PostalCode):
                 return False
     return True
 
-
-    
-def ValidatePostal(PostalCode):
-    for char in PostalCode:
-        if char.isalnum() == False:
-            if char != "-":
-                return False
-    return True
 
 def ValidatePhone(PhoneNumber):
     if len(PhoneNumber) != 12:
@@ -45,14 +32,6 @@ def ValidatePhone(PhoneNumber):
         elif not PhoneNumber[i].isdigit():
             return False
     return True
-
-def ProgressBar(iteration, total, prefix='', suffix='', length=30, fill='█'):
- 
-    percent = ("{0:.1f}").format(100 * (iteration / float(total)))
-    filled_length = int(length * iteration // total)
-    bar = fill * filled_length + '-' * (length - filled_length)
-    sys.stdout.write(f'\r{prefix} |{bar}| {percent}% {suffix}')
-    sys.stdout.flush()
 
 
 
@@ -78,6 +57,12 @@ def create_new_account():
     print("\nWelcome to HAB Taxi's Employee Registration system.")
     print("Please provide the following information to register a new driver\n")
 
+
+
+    ##############################################################
+    # Should we move this to the end and have it auto generated? #
+    ##############################################################
+
     while True:
         while True:
             DriverNumber = input("Please enter the driver number: ")
@@ -87,10 +72,11 @@ def create_new_account():
             except:
                 print("Data-entry error: Please ensure that the driver's number has a strictly-numeric value.")
 
-        DriverFirstName = input("Please enter the driver's first name: ").title()
-        DriverSurname = input("Please enter the driver's surname: ").title()
-        StreetAdd = input("Please enter the driver's street address: ")
-        City = input("Please enter the driver's city: ")
+    # Data entry for driver contact information
+        DriverFirstName = input("Please enter the driver's first name: ").title().strip()
+        DriverSurname = input("Please enter the driver's surname: ").title().strip()
+        StreetAdd = input("Please enter the driver's street address: ").title().strip()
+        City = input("Please enter the driver's city: ").title().strip()
 
         while True:
             PostalCode = input("Please enter the driver's postal code (X#X-#X#) ").upper()
@@ -106,15 +92,20 @@ def create_new_account():
             else:
                 print("Data-entry error: please ensure that the phone number is entered in the requested format, including hyphens (-).")
 
+    # Data entry for driver license information
+        print("\nPlease provide the following driver's license information:")
         DrivLicNum = input("Please enter the driver's license number: ")
 
         while True:
             LicenseExpiry = input("Please enter the driver's license expiry date (YYYY-MM-DD): ")
-            if ValidateDate(LicenseExpiry):
+            if val.ValidateDate(LicenseExpiry):
                 break
             else:
                 print("Data-entry error: please enter the date in the given format (YYYY-MM-DD).")
 
+
+    # Data entry for driver insurance information
+        print("\nPlease provide the following insurance information:")
         InsuranceCompany = input("Please enter the driver's associated insurance company: ")
 
         while True:
@@ -125,13 +116,22 @@ def create_new_account():
             except:
                 print("Data-entry error: Please ensure that the insurance policy number has a strictly-numeric value.")
 
+
+    # Data entry for driver vehicle information
         while True:
             OwnsCar = input("Does the driver own their vehicle (Y/N)?: ").upper()
             if OwnsCar in ["Y", "N"]:
                 break
             else:
                 print("Data-entry error: Please enter Y(for yes), or N(for no).")
-        
+
+
+
+    ##################################
+    #       Do we need this?         #
+    ##################################
+
+
         while True:
             try:
                 BalanceDue = float(input("Balance Due: "))
@@ -157,7 +157,7 @@ def create_new_account():
     print()
     for i in range(10):
         time.sleep(0.1)  
-        ProgressBar(i + 1, 10, suffix='Complete', length=50)
+        util.ProgressBar(i + 1, 10, suffix='Complete', length=50)
     print()
     print()
     print("Thank you for using HAB Taxi's Employee Registration system.")

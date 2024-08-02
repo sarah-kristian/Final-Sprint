@@ -215,6 +215,16 @@ def get_year_between(prompt, start, end):
             return year
 
 
+def ValidateDate(date_text):
+    try:
+        datetime.strptime(date_text, '%Y-%m-%d')
+        return True
+    except:
+        return False
+
+
+
+
 def get_plate_number(prompt):
 # input validation for Canadian car plate number
     while True:

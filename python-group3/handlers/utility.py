@@ -4,6 +4,7 @@
 # Author: Sarah Perry
 
 import os
+import sys
 import time
 
 # Clear the screen
@@ -27,6 +28,7 @@ def get_last_id(file_path, default_id):
         print(f"An error occurred while reading the file: {e}")
         return default_id
 
+
 # Generate progress indicator
 def progress_dots(prompt):
     total_iterations = 10 # The more iterations, the more time is takes.
@@ -36,6 +38,16 @@ def progress_dots(prompt):
         time.sleep(0.3)  # Simulate a delay
         print(".", end="", flush=True)  # Print a dot and flush the output buffer
     print("\n")  
+
+
+
+def ProgressBar(iteration, total, prefix='', suffix='', length=30, fill='█'):
+ 
+    percent = ("{0:.1f}").format(100 * (iteration / float(total)))
+    filled_length = int(length * iteration // total)
+    bar = fill * filled_length + '-' * (length - filled_length)
+    sys.stdout.write(f'\r{prefix} |{bar}| {percent}% {suffix}')
+    sys.stdout.flush()
 
 
 # Check if the password is correct
