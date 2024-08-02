@@ -1,7 +1,7 @@
 
 # import libraries
 
-import datetime
+from datetime import datetime
 import sys
 import time
 import handlers.utility as util
@@ -33,6 +33,13 @@ def ValidatePhone(PhoneNumber):
             return False
     return True
 
+
+def ValidateDate(date_text):
+    try:
+        datetime.strptime(date_text, '%Y-%m-%d')
+        return True
+    except:
+        return False
 
 
 def print_header(prompt):
@@ -73,31 +80,30 @@ def create_new_account():
                 print("Data-entry error: Please ensure that the driver's number has a strictly-numeric value.")
 
     # Data entry for driver contact information
-        DriverFirstName = input("Please enter the driver's first name: ").title().strip()
-        DriverSurname = input("Please enter the driver's surname: ").title().strip()
-        StreetAdd = input("Please enter the driver's street address: ").title().strip()
-        City = input("Please enter the driver's city: ").title().strip()
+        DriverFirstName = val.get_user_info("    Driver's first name: ").title().strip()
+        DriverSurname = input("    Driver's surname: ").title().strip()
+        StreetAdd = input("    Driver's street address: ").title().strip()
+        City = input("    Driver's city: ").title().strip()
+        
+        
+        PostalCode = val.get_user_pc("    Ddriver's postal code (X#X #X#) ")
+        PhoneNumber = val.get_user_phone("    Driver's phone number (###-###-####): ")
 
-        while True:
-            PostalCode = input("Please enter the driver's postal code (X#X-#X#) ").upper()
-            if ValidatePostal(PostalCode):
-                break
-            else:
-                print("Data-entry error: please ensure to strictly use alphanumeric characters and hyphens (-).")
+        #while True:    
+        #    PhoneNumber = input("Please enter the driver's phone number ( ###-###-#### ): ")
+        #    if ValidatePhone(PhoneNumber):
+        #        break
+        #    else:
+        #        print("Data-entry error: please ensure that the phone number is entered in the requested format, including hyphens (-).")
 
-        while True:    
-            PhoneNumber = input("Please enter the driver's phone number ( ###-###-#### ): ")
-            if ValidatePhone(PhoneNumber):
-                break
-            else:
-                print("Data-entry error: please ensure that the phone number is entered in the requested format, including hyphens (-).")
 
     # Data entry for driver license information
         print("\nPlease provide the following driver's license information:")
-        DrivLicNum = input("Please enter the driver's license number: ")
+        DrivLicNum = input("    License number: ")
 
+        
         while True:
-            LicenseExpiry = input("Please enter the driver's license expiry date (YYYY-MM-DD): ")
+            LicenseExpiry = input("    License expiry date (YYYY-MM-DD): ")
             if val.ValidateDate(LicenseExpiry):
                 break
             else:
@@ -106,10 +112,10 @@ def create_new_account():
 
     # Data entry for driver insurance information
         print("\nPlease provide the following insurance information:")
-        InsuranceCompany = input("Please enter the driver's associated insurance company: ")
+        InsuranceCompany = input("    Driver's associated insurance company: ")
 
         while True:
-            InsPolicyNum = input("Please enter the driver's insurance policy number: ")
+            InsPolicyNum = input("    Insurance policy number: ")
             try:
                 int(InsPolicyNum)
                 break
@@ -118,8 +124,9 @@ def create_new_account():
 
 
     # Data entry for driver vehicle information
+        print("\nPlease provide the following information:")
         while True:
-            OwnsCar = input("Does the driver own their vehicle (Y/N)?: ").upper()
+            OwnsCar = input("    Does the driver own their vehicle (Y/N)?: ")[0].upper()
             if OwnsCar in ["Y", "N"]:
                 break
             else:
@@ -134,10 +141,18 @@ def create_new_account():
 
         while True:
             try:
-                BalanceDue = float(input("Balance Due: "))
+                BalanceDue = float(input("\nBalance Due: "))
                 break
             except:
                 print("Data-entry error: Please ensure that the balance due is a valid number.")
+
+
+        print("""\nHere we could display the data that was entered, and ask the user if they would like to make any changes.
+If the user chooses to make changes, we could prompt them to enter the field they would like to change, and then
+prompt them to enter the new value for that field. We could then display the updated data and ask the user if they
+would like to make any additional changes. If the user chooses not to make any changes, we could save it. 
+              To do this in the past, we've created an employee list (or object like in js) and stored the data in that list/obj.""")
+        
 
         # Writing to data file 
 
@@ -147,10 +162,12 @@ def create_new_account():
         
         f.close()
 
-        AdditionalEntry = input("Would you like to enter another new employee into the system (Y/N)?: ").upper()
+        AdditionalEntry = input("\nWould you like to enter another new employee into the system (Y/N)?: ").upper()
         if AdditionalEntry == "N":
             break
 
+
+      
     # Progress bar + exit message
     print()
     print("Saving your entries...")
