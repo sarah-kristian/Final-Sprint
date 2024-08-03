@@ -45,13 +45,15 @@ def CalculateProfit():
     
     # Initialize counters and accumulators
     InvCtr = 0
-    RepairPartsCtr = 0
+    TireChangeCtr = 0
     OilChangeCtr = 0
+    InspectionCtr = 0
     OtherExpensesCtr = 0
     
     ExpensesAcc = 0
-    RepairPartsAcc = 0
+    TireChangeAcc = 0
     OilChangeAcc = 0
+    InspectionAcc = 0
     OtherExpensesAcc = 0
 
 
@@ -81,12 +83,15 @@ def CalculateProfit():
                 ExpensesAcc += Total
 
                 # Accumulate totals and count by expense type
-                if Description == "Repair parts":
-                    RepairPartsAcc += Total
-                    RepairPartsCtr += 1
-                elif Description == "Oil change":
+                if Description == "Tire Change":
+                    TireChangeAcc += Total
+                    TireChangeCtr += 1
+                elif Description == "Oil Change":
                     OilChangeAcc += Total
                     OilChangeCtr += 1
+                elif "Inspection" in Description:
+                    InspectionAcc += Total
+                    InspectionCtr += 1
                 else:
                     OtherExpensesAcc += Total
                     OtherExpensesCtr += 1
@@ -95,8 +100,9 @@ def CalculateProfit():
     print("=====================================================================================")
     print(f"Total invoices: {InvCtr:<4d}                                       Total Expenses: {FV.FDollar2(ExpensesAcc):>11s}")
     print()
-    print(f"Repair parts: {RepairPartsCtr} invoices, Total Amount: {FV.FDollar2(RepairPartsAcc):>11s}")
+    print(f"Repair parts: {TireChangeCtr} invoices, Total Amount: {FV.FDollar2(TireChangeAcc):>11s}")
     print(f"Oil change  : {OilChangeCtr} invoices, Total Amount: {FV.FDollar2(OilChangeAcc):>11s}")
+    print(f"Inspection  : {InspectionCtr} invoices, Total Amount: {FV.FDollar2(InspectionAcc):>11s}")
     print(f"Other       : {OtherExpensesCtr} invoices, Total Amount: {FV.FDollar2(OtherExpensesAcc):>11s}")
     print()
     print("                                      END OF LISTING")
@@ -154,10 +160,10 @@ def CalculateProfit():
                 RevenueAcc += Total
 
                 # Accumulate totals and count by revenue type
-                if Description == "Monthly Stand Fees":
+                if Description == "Monthly Stand Fee":
                     StandFeesAcc += Total
                     StandFeesCtr += 1
-                elif Description == "Car Rental":
+                elif 'Rental' in Description:
                     CarRentalAcc += Total
                     CarRentalCtr += 1
                 elif Description == "Service Fees":
