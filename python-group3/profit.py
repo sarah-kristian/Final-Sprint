@@ -16,18 +16,15 @@ RevenueFile = 'python-group3/data_files/revenue.dat'
 
 
 def CalculateProfit():
-    # Get the start and end dates for the report
-    print()
-    print("This program will generate a profit report for a specified date range.")
-    print()
 
     # For testing purposes, use the following hard-coded dates
     StartDate = "2022-01-01"
     EndDate = "2022-03-05"
 
-    #StartDate = input("Enter the start date (YYYY-MM-DD): ")
-    #EndDate = input("Enter the end date (YYYY-MM-DD): ")
+    # Get the start and end dates for the report
 
+    # StartDate = input("Enter the start date (YYYY-MM-DD): ")
+    # EndDate = input("Enter the end date (YYYY-MM-DD): ")
 
     # Convert input dates to datetime objects
     StartDate_dt = datetime.datetime.strptime(StartDate, '%Y-%m-%d')
@@ -44,11 +41,19 @@ def CalculateProfit():
     print("Number        Date         Number                                               ")
     print("=====================================================================================")
 
-
-
+    
+    
     # Initialize counters and accumulators
     InvCtr = 0
+    RepairPartsCtr = 0
+    OilChangeCtr = 0
+    OtherExpensesCtr = 0
+    
     ExpensesAcc = 0
+    RepairPartsAcc = 0
+    OilChangeAcc = 0
+    OtherExpensesAcc = 0
+
 
     # Open the data file
     with open(ExpensesFile, "r") as f:
@@ -75,32 +80,53 @@ def CalculateProfit():
                 InvCtr += 1
                 ExpensesAcc += Total
 
+                # Accumulate totals and count by expense type
+                if Description == "Repair parts":
+                    RepairPartsAcc += Total
+                    RepairPartsCtr += 1
+                elif Description == "Oil change":
+                    OilChangeAcc += Total
+                    OilChangeCtr += 1
+                else:
+                    OtherExpensesAcc += Total
+                    OtherExpensesCtr += 1
+
     # Print summary data - counters and accumulators
     print("=====================================================================================")
-    print(f"Total invoices: {InvCtr:<4d}                                      Total Expenses: {FV.FDollar2(ExpensesAcc):>11s}")
+    print(f"Total invoices: {InvCtr:<4d}                                       Total Expenses: {FV.FDollar2(ExpensesAcc):>11s}")
+    print()
+    print(f"Repair parts: {RepairPartsCtr} invoices, Total Amount: {FV.FDollar2(RepairPartsAcc):>11s}")
+    print(f"Oil change  : {OilChangeCtr} invoices, Total Amount: {FV.FDollar2(OilChangeAcc):>11s}")
+    print(f"Other       : {OtherExpensesCtr} invoices, Total Amount: {FV.FDollar2(OtherExpensesAcc):>11s}")
     print()
     print("                                      END OF LISTING")
     print("")
     print("")
-
-
 
     # Generate report headings
     print()
     print("                                       HAB COMPANY")
     print(f"                                Revenue Listing Report")
     print()
-    (f"From {StartDate} to {EndDate}")
+    print(f"From {StartDate} to {EndDate}")
     print()
     print("Transaction      Transaction      Description          Employee      Subtotal     HST        Total")
     print("  Number            Date                                Number                               ")
     print("===================================================================================================")
 
-
-
     # Initialize counters and accumulators
     TransCtr = 0
+    StandFeesCtr = 0
+    CarRentalCtr = 0
+    ServiceFeesCtr = 0
+    ProductSalesCtr = 0
+
     RevenueAcc = 0
+    StandFeesAcc = 0
+    CarRentalAcc = 0
+    ServiceFeesAcc = 0
+    ProductSalesAcc = 0
+
 
     # Open the data file
     with open(RevenueFile, "r") as f:
@@ -111,7 +137,7 @@ def CalculateProfit():
 
             TransNum = RevLst[0].strip()
             TransDate = RevLst[1].strip()
-            TransDate_dt = datetime.datetime.strptime(InvDate, "%Y-%m-%d")
+            TransDate_dt = datetime.datetime.strptime(TransDate, "%Y-%m-%d")
             Description = RevLst[2].strip()
             EmplNum = RevLst[3].strip()
             TransAmnt = float(RevLst[4].strip())
@@ -119,7 +145,7 @@ def CalculateProfit():
             Total = float(RevLst[6].strip())
 
             # Check if the invoice date falls within the specified date range
-            if StartDate_dt <= InvDate_dt <= EndDate_dt:
+            if StartDate_dt <= TransDate_dt <= EndDate_dt:
                 # Display the detail line
                 print(f"  {TransNum:<11s}     {FV.FDateM(TransDate_dt):<10s}   {Description:<25s} {EmplNum:<10s} {FV.FDollar2(TransAmnt):>9s} {FV.FDollar2(HST):>9s} {FV.FDollar2(Total):>11s}")
                 
@@ -127,12 +153,32 @@ def CalculateProfit():
                 TransCtr += 1
                 RevenueAcc += Total
 
+                # Accumulate totals and count by revenue type
+                if Description == "Monthly Stand Fees":
+                    StandFeesAcc += Total
+                    StandFeesCtr += 1
+                elif Description == "Car Rental":
+                    CarRentalAcc += Total
+                    CarRentalCtr += 1
+                elif Description == "Service Fees":
+                    ServiceFeesAcc += Total
+                    ServiceFeesCtr += 1
+                elif Description == "Product Sales":
+                    ProductSalesAcc += Total
+                    ProductSalesCtr += 1
+
     # Print summary data - counters and accumulators
     print("===================================================================================================")
-    print(f"Total invoices: {TransCtr:<4d}                                                     Total Revenue: {FV.FDollar2(RevenueAcc):>11s}")
+    print(f"Total transactions: {TransCtr:<4d}                                                 Total Revenue: {FV.FDollar2(RevenueAcc):>11s}")
+    print()
+    print(f"Monthly Stand Fees: {StandFeesCtr} transactions, Total Amount: {FV.FDollar2(StandFeesAcc):>11s}")
+    print(f"Car Rental        : {CarRentalCtr} transactions, Total Amount: {FV.FDollar2(CarRentalAcc):>11s}")
+    print(f"Service Fees      : {ServiceFeesCtr} transactions, Total Amount: {FV.FDollar2(ServiceFeesAcc):>11s}")
+    print(f"Product Sales     : {ProductSalesCtr} transactions, Total Amount: {FV.FDollar2(ProductSalesAcc):>11s}")
     print()
     print("                                         END OF LISTING")
     print("")
+    
     # Calculate and print profit/loss
     ProfitOrLoss = RevenueAcc - ExpensesAcc
     ProfitOrLossStr = FV.FDollar2(ProfitOrLoss)
@@ -143,7 +189,6 @@ def CalculateProfit():
     print()
     print()
     print()
-
 
 
 if __name__ == "__main__":
