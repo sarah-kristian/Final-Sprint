@@ -1,18 +1,19 @@
-
 # import libraries
 
-from datetime import datetime
+from datetime import datetime, timedelta
 import sys
 import time
 import handlers.utility as util
 import handlers.validation as val
+import handlers.display as dis
 
 # define global variables
 EmployeeFile = 'python-group3/data_files/employees.dat'
+DefaultsFile = 'python-group3/data_files/defaults.dat'
 HeaderMsg = "Employee Registration"
 
 
-# define functions
+# define utlity functions
     
 def ValidatePostal(PostalCode):
     for char in PostalCode:
@@ -42,17 +43,25 @@ def ValidateDate(date_text):
         return False
 
 
-def print_header(prompt):
+#define display functions
+
+def print_header(title, width):
+    if width < 44:
+        width = int(44)
+        new_width = int(0)
+    else:
+        new_width = int((width-44)/2)
+
     print()
-    print("-----------------------------------------------------------------------")
-    print("            __  _____    ____     ______           _ ")
-    print("           / / / /   |  / __ )   /_  __/___ __  __(_)")
-    print("          / /_/ / /| | / __  |    / / / __ `/ |/_/ / ")
-    print("         / __  / ___ |/ /_/ /    / / / /_/ />  </ /  ")
-    print("        /_/ /_/_/  |_/_____/    /_/  \\__,_/_/|_/_/   ")
+    print(f"{'-' * width}")
+    print(f" " * new_width + '    __  _____    ____     ______           _ ' + " " * new_width)
+    print(f" " * new_width + '   / / / /   |  / __ )   /_  __/___ __  __(_)' + " " * new_width)
+    print(f" " * new_width + '  / /_/ / /| | / __  |    / / / __ `/ |/_/ / ' + " " * new_width)
+    print(f" " * new_width + ' / __  / ___ |/ /_/ /    / / / /_/ />  </ /  ' + " " * new_width)
+    print(f" " * new_width + '/_/ /_/_/  |_/_____/    /_/  \\__,_/_/|_/_/  ' + " " * new_width)
     print()
-    print(f"                       {prompt}")
-    print("-----------------------------------------------------------------------")
+    print(f"{title:^{width}}")
+    print(f"{'-' * width}")
     print()
 
 
@@ -60,71 +69,56 @@ def print_header(prompt):
 
 def create_new_account():
 
-    print_header(HeaderMsg)
+    print_header(HeaderMsg, 80)
     print("\nWelcome to HAB Taxi's Employee Registration system.")
-    print("Please provide the following information to register a new driver\n")
+    print("Please provide the following information to register a new driver:\n")
 
-
-
-    ##############################################################
-    # Should we move this to the end and have it auto generated? #
-    ##############################################################
 
     while True:
-        while True:
-            DriverNumber = input("Please enter the driver number: ")
-            try:
-                int(DriverNumber)
-                break
-            except:
-                print("Data-entry error: Please ensure that the driver's number has a strictly-numeric value.")
+        # Auto-generate DriverNumber
+        f = open(DefaultsFile, "r")
+        DriverNumber = int(f.readline().strip())
+        f.close()
+
+        f = open(DefaultsFile, "w")
+        f.write(str(DriverNumber + 1))
+        f.close()
 
     # Data entry for driver contact information
-        DriverFirstName = val.get_user_info("    Driver's first name: ").title().strip()
-        DriverSurname = input("    Driver's surname: ").title().strip()
-        StreetAdd = input("    Driver's street address: ").title().strip()
-        City = input("    Driver's city: ").title().strip()
+        DriverFirstName = val.get_user_info("   Driver's first name:                  |   ").title().strip()
+        DriverSurname =               input("   Driver's surname:                     |   ").title().strip()
+        StreetAdd =                   input("   Driver's street address:              |   ").title().strip()
+        City =                        input("   Driver's city:                        |   ").title().strip()
         
         
-        PostalCode = val.get_user_pc("    Ddriver's postal code (X#X #X#) ")
-        PhoneNumber = val.get_user_phone("    Driver's phone number (###-###-####): ")
-
-        #while True:    
-        #    PhoneNumber = input("Please enter the driver's phone number ( ###-###-#### ): ")
-        #    if ValidatePhone(PhoneNumber):
-        #        break
-        #    else:
-        #        print("Data-entry error: please ensure that the phone number is entered in the requested format, including hyphens (-).")
-
+        PostalCode =        val.get_user_pc("   Driver's postal code (X#X #X#):       |   ")
+        PhoneNumber =    val.get_user_phone("   Driver's phone number (###-###-####): |   ")
 
     # Data entry for driver license information
-        print("\nPlease provide the following driver's license information:")
-        DrivLicNum = input("    License number: ")
+        print("\n\nPlease provide the following driver's license information:\n")
+        DrivLicNum =                  input("    License number:                      |   ")
 
-        
         while True:
-            LicenseExpiry = input("    License expiry date (YYYY-MM-DD): ")
+            LicenseExpiry =           input("    License expiry date (YYYY-MM-DD):    |   ")
             if val.ValidateDate(LicenseExpiry):
                 break
             else:
                 print("Data-entry error: please enter the date in the given format (YYYY-MM-DD).")
 
-
     # Data entry for driver insurance information
-        print("\nPlease provide the following insurance information:")
-        InsuranceCompany = input("    Driver's associated insurance company: ")
+        print("\n\nPlease provide the following insurance information:\n")
+        InsuranceCompany =            input("    Associated insurance company:        |   ")
 
         while True:
-            InsPolicyNum = input("    Insurance policy number: ")
+            InsPolicyNum =            input("    Insurance policy number:             |   ")
             try:
                 int(InsPolicyNum)
                 break
             except:
                 print("Data-entry error: Please ensure that the insurance policy number has a strictly-numeric value.")
 
-
     # Data entry for driver vehicle information
-        print("\nPlease provide the following information:")
+        print("\n\nPlease provide the following information:\n")
         while True:
             OwnsCar = input("    Does the driver own their vehicle (Y/N)?: ")[0].upper()
             if OwnsCar in ["Y", "N"]:
@@ -132,12 +126,9 @@ def create_new_account():
             else:
                 print("Data-entry error: Please enter Y(for yes), or N(for no).")
 
-
-
     ##################################
     #       Do we need this?         #
     ##################################
-
 
         while True:
             try:
@@ -146,13 +137,32 @@ def create_new_account():
             except:
                 print("Data-entry error: Please ensure that the balance due is a valid number.")
 
+        StartDate = datetime.now().strftime("%Y-%m-%d")
+        RenewalDate = (datetime.now() + timedelta(weeks=26)).strftime("%Y-%m-%d")        
 
-        print("""\nHere we could display the data that was entered, and ask the user if they would like to make any changes.
-If the user chooses to make changes, we could prompt them to enter the field they would like to change, and then
-prompt them to enter the new value for that field. We could then display the updated data and ask the user if they
-would like to make any additional changes. If the user chooses not to make any changes, we could save it. 
-              To do this in the past, we've created an employee list (or object like in js) and stored the data in that list/obj.""")
-        
+        # Generating the customer ID receipt
+
+        NameDSP = f"{DriverFirstName} {DriverSurname}"
+
+        print()
+        print("+-----------------------------------+")
+        print("|         HAB TAXI SERVICES         |")
+        print("|                                   |")
+        print("|    Driver ID Card                 |")
+        print("|                                   |")
+        print("|  [Driver Photo]                   |")
+        print("|                                   |")
+        print(f"|  Name: {NameDSP:<23}    |")
+        print(f"|  Driver ID: {DriverNumber:<6}                |")
+        print("|  Job Title: Driver                |")
+        print(f"|  Phone: {dis.phone_num_dsp(PhoneNumber)}            |")
+        print(f"|  License No: {DrivLicNum:<9}            |")
+        print(f"|  Expiry Date: {LicenseExpiry}          |")
+        print("|                                   |")
+        print(f"|  Start Date: {StartDate}           |") 
+        print(f"|  Renewal Date: {RenewalDate}         |")  # Placeholder date
+        print("+-----------------------------------+")
+        print()
 
         # Writing to data file 
 
@@ -165,8 +175,6 @@ would like to make any additional changes. If the user chooses not to make any c
         AdditionalEntry = input("\nWould you like to enter another new employee into the system (Y/N)?: ").upper()
         if AdditionalEntry == "N":
             break
-
-
       
     # Progress bar + exit message
     print()
