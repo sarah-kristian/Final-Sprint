@@ -8,28 +8,17 @@ from handlers.utility import clear_screen
 from financialReport import GenerateFinancialReport
 from HABEmployee import create_new_account
 
-#define constants:
-MENU = """
-    ==========================================
-     *          HAB Taxi Services           *
-             Company Services System
-    ==========================================
+# define funtions
+def draw_car():
+    car = (f"""
+             ______
+            /|_||_\\`.__
+           (   _    _ _\\
+    hjw     =`-(_)--(_)-'
 
-        
-       1. Enter a New Employee (driver)
-       2. Enter Comapny Revenues 
-       3. Enter Company Expenses
-       4. Track Car Rentals
-       5. Record Employee Payment
-       6. Print Company Profit Listing
-       7. Print Driver Financial Listing
-       8. Coroporate Summary Report
-       9. Quit Program
-
-        
-    ==========================================
-    """
-
+        """)
+    print(car)
+    
 
 def print_header(title, width):
     if width < 44:
@@ -40,11 +29,11 @@ def print_header(title, width):
 
     print()
     print(f"{'-' * width}")
-    print(f" " * new_width + '    __  _____    ____     ______           _ ' + " " * new_width)
-    print(f" " * new_width + '   / / / /   |  / __ )   /_  __/___ __  __(_)' + " " * new_width)
-    print(f" " * new_width + '  / /_/ / /| | / __  |    / / / __ `/ |/_/ / ' + " " * new_width)
-    print(f" " * new_width + ' / __  / ___ |/ /_/ /    / / / /_/ />  </ /  ' + " " * new_width)
-    print(f" " * new_width + '/_/ /_/_/  |_/_____/    /_/  \\__,_/_/|_/_/  ' + " " * new_width)
+    print(f"{' ' * new_width}" + '    __  _____    ____     ______           _ ')
+    print(f"{' ' * new_width}" + '   / / / /   |  / __ )   /_  __/___ __  __(_)')
+    print(f"{' ' * new_width}" + '  / /_/ / /| | / __  |    / / / __ `/ |/_/ / ')
+    print(f"{' ' * new_width}" + ' / __  / ___ |/ /_/ /    / / / /_/ />  </ /  ')
+    print(f"{' ' * new_width}" + '/_/ /_/_/  |_/_____/    /_/  \\__,_/_/|_/_/  ')
     print()
     print(f"{title:^{width}}")
     print(f"{'-' * width}")
@@ -97,16 +86,41 @@ def generate_summary_report():
 
 # Main Program
 def menu():
-    
+
+    # define header & menu options
+    width = 56
+    header_msg = '*       Company Services Menu       *'
+    option1 = 'Enter a New Employee (driver)'
+    option2 = 'Enter Comapny Revenues'
+    option3 = 'Enter Company Expenses'
+    option4 = 'Track Car Rentals'
+    option5 = 'Record Employee Payment'
+    option6 = 'Print Company Profit Listing'
+    option7 = 'Print Driver Financial Listing'
+    option8 = 'Coroporate Summary Report'
+    option9 = 'Quit Program'
+
+    options = [option1, option2, option3, option4, option5, option6, option7, option8, option9]
+
+    opt_num = 0
+
+    footer_line = f"{'-' * width}"
+
+# main loop starts here
     while True:
         clear_screen()
-        print_header("", 80)
 
-        
-        print(MENU)
+    # Display Menu
+        print_header(header_msg, width)
+        for option in options:
+            opt_num += 1
+            print(f"{' '*10}{opt_num}. {option}")
+        print()
+        print(footer_line)
+
 
     # User inputs        
-        choice = input("\nEnter the number of the program would you like to run: ").strip()
+        choice = input("\nWhich menu option would you like to run (1-9)?: ").strip()
 
     # Calculations (function selector)    
         if choice == '1':
@@ -136,6 +150,7 @@ def menu():
         elif choice == '9':
             print()
             print("Thanks for using our services!")
+            draw_car()
             print()
             break
         else:
@@ -148,7 +163,9 @@ def menu():
         go_on = input("\nWould you like to run another program (Y/N)  ").lower().strip()
         if go_on == "n" or go_on == "no":
             print()
-            print("Have a great day!")
+            print("         Have a great day!")
+            draw_car()
+
             print()
             print()
             break
