@@ -270,7 +270,7 @@ def PrintExpSummary(StartDate_dt, EndDate_dt):
 #############
 
 
-def GenerateProfitListing(type):
+def GenerateFinancialReport(type):
     # For testing purposes, use the following hard-coded dates
     StartDate = "2022-01-01"
     EndDate = "2022-03-05"
@@ -350,4 +350,4 @@ def GenerateProfitListing(type):
 
 
 if __name__ == "__main__":
-    GenerateProfitListing("profit")
+    GenerateFinancialReport("profit")

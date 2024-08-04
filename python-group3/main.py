@@ -5,7 +5,7 @@
 
 # import libraries
 from handlers.utility import clear_screen
-from profit import CalculateProfit as print_profit_listing
+from financialReport import GenerateFinancialReport
 from HABEmployee import create_new_account
 
 #define constants:
@@ -29,6 +29,27 @@ MENU = """
         
     ==========================================
     """
+
+
+def print_header(title, width):
+    if width < 44:
+        width = int(44)
+        new_width = int(0)
+    else:
+        new_width = int((width-44)/2)
+
+    print()
+    print(f"{'-' * width}")
+    print(f" " * new_width + '    __  _____    ____     ______           _ ' + " " * new_width)
+    print(f" " * new_width + '   / / / /   |  / __ )   /_  __/___ __  __(_)' + " " * new_width)
+    print(f" " * new_width + '  / /_/ / /| | / __  |    / / / __ `/ |/_/ / ' + " " * new_width)
+    print(f" " * new_width + ' / __  / ___ |/ /_/ /    / / / /_/ />  </ /  ' + " " * new_width)
+    print(f" " * new_width + '/_/ /_/_/  |_/_____/    /_/  \\__,_/_/|_/_/  ' + " " * new_width)
+    print()
+    print(f"{title:^{width}}")
+    print(f"{'-' * width}")
+    print()
+
 
 ############################################################################################################
 # Define Menu Functions
@@ -79,6 +100,9 @@ def menu():
     
     while True:
         clear_screen()
+        print_header("", 80)
+
+        
         print(MENU)
 
     # User inputs        
@@ -102,7 +126,7 @@ def menu():
             record_employee_payment()
         elif choice == '6':
             clear_screen()
-            print_profit_listing()
+            GenerateFinancialReport("profit")
         elif choice == '7':
             clear_screen()
             print_driver_listing()
@@ -111,7 +135,7 @@ def menu():
             generate_summary_report()
         elif choice == '9':
             print()
-            print("Thanks for playing!")
+            print("Thanks for using our services!")
             print()
             break
         else:
