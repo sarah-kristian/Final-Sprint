@@ -237,6 +237,24 @@ def generate_report():
     overview = employee_overview
     print(overview)
 
+def print_header(title, width):
+    if width < 44:
+        width = int(44)
+        new_width = int(0)
+    else:
+        new_width = int((width-44)/2)
+    print()
+    print(f"{'-' * width}")
+    print(f" " * new_width + '    __  _____    ____     ______           _ ' + " " * new_width)
+    print(f" " * new_width + '   / / / /   |  / __ )   /_  __/___ __  __(_)' + " " * new_width)
+    print(f" " * new_width + '  / /_/ / /| | / __  |    / / / __ `/ |/_/ / ' + " " * new_width)
+    print(f" " * new_width + ' / __  / ___ |/ /_/ /    / / / /_/ />  </ /  ' + " " * new_width)
+    print(f" " * new_width + '/_/ /_/_/  |_/_____/    /_/  \\__,_/_/|_/_/  ' + " " * new_width)
+    print()
+    print(f"{title:^{width}}").upper()
+    print(f"{'-' * width}")
+    print()
 
 if __name__ == "__main__":
-    generate_report()
+    #generate_report()
+    print_header(HeaderMsg, 80)
