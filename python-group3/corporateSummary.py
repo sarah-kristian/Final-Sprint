@@ -16,7 +16,7 @@ from financialReport import GenerateFinancialReport
 EmployeeFile = 'python-group3/data_files/employees.dat'
 ExpensesFile = 'python-group3/data_files/expenses.dat'
 RevenuesFile = 'python-group3/data_files/revenues.dat'
-RentalsFile = 'python-group3/data_files/rentals.dat'
+
 
 HeaderMsg = "Corporate Summary Report"
 TODAY = datetime.now()
