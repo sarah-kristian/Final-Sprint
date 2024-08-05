@@ -6,11 +6,11 @@
 # import libraries
 
 from datetime import datetime
-import sys
-import time
 import handlers.utility as util
 import handlers.validation as val
+import handlers.display as dsp
 from financialReport import GenerateFinancialReport
+
 
 # define global variables
 EmployeeFile = 'python-group3/data_files/employees.dat'
@@ -20,6 +20,7 @@ RevenuesFile = 'python-group3/data_files/revenues.dat'
 
 HeaderMsg = "Corporate Summary Report"
 TODAY = datetime.now()
+TODAY_dsp = dsp.date_dsp(TODAY)
 
 
 # define functions
@@ -42,27 +43,6 @@ def get_top_X(dictionary, num):
 def get_bottom_X(dictionary, num):
     bottomX = dict(sorted(dictionary.items(), key=lambda item: item[1])[:num])
     return bottomX
-
-
-def print_header(title, width):
-    if width < 44:
-        width = int(44)
-        new_width = int(0)
-    else:
-        new_width = int((width-44)/2)
-
-    print()
-    print(f"{'-' * width}")
-    print(f" " * new_width + '    __  _____    ____     ______           _ ' + " " * new_width)
-    print(f" " * new_width + '   / / / /   |  / __ )   /_  __/___ __  __(_)' + " " * new_width)
-    print(f" " * new_width + '  / /_/ / /| | / __  |    / / / __ `/ |/_/ / ' + " " * new_width)
-    print(f" " * new_width + ' / __  / ___ |/ /_/ /    / / / /_/ />  </ /  ' + " " * new_width)
-    print(f" " * new_width + '/_/ /_/_/  |_/_____/    /_/  \\__,_/_/|_/_/  ' + " " * new_width)
-    print()
-    print(f"{title:^{width}}")
-    print(f"{'-' * width}")
-    print()
-
 
 
 ##############################
@@ -169,11 +149,6 @@ def print_employee_report():
     print(f"{'END OF REPORT':^{width}}\n\n")
 
 
-##############################
-# Detailed Metrics
-##############################
-
-#
 
 ########################
 # Main program
@@ -194,12 +169,12 @@ def generate_report():
     # [text in here maybe?]
 
 
-    print_header(HeaderMsg, 86)
+    util.print_header(HeaderMsg, 86)
     print("\nWelcome to HAB Taxi's Summary Report.")
     print("Please provide the following information to do stuff\n")
 
 
-    print(f"{'Report Generated On:':<30} {TODAY.strftime('%Y-%m-%d')}")
+    print(f"{'Report Generated On:':<30} {TODAY_dsp}")
     print_employee_report()
     print("\n")
     GenerateFinancialReport("profit summary")

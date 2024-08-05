@@ -3,34 +3,24 @@
 # Date(s): Jul 31 2024 - 
  
  
-#define libraries
+# define libraries
+
 import datetime
 import handlers.display as FV  
+from handlers.utility import print_header, convert_to_datetime
+from handlers.validation import get_date_string
 
-#define file paths
+
+
+# define file paths
 ExpensesFile = 'python-group3/data_files/expenses.dat'
 RevenueFile = 'python-group3/data_files/revenue.dat'
 
 
-# define header function
-def print_header(title, width):
-    if width < 44:
-        width = int(44)
-        new_width = int(0)
-    else:
-        new_width = int((width-44)/2)
 
-    print()
-    print(f"{'-' * width}")
-    print(f" " * new_width + '    __  _____    ____     ______           _ ' + " " * new_width)
-    print(f" " * new_width + '   / / / /   |  / __ )   /_  __/___ __  __(_)' + " " * new_width)
-    print(f" " * new_width + '  / /_/ / /| | / __  |    / / / __ `/ |/_/ / ' + " " * new_width)
-    print(f" " * new_width + ' / __  / ___ |/ /_/ /    / / / /_/ />  </ /  ' + " " * new_width)
-    print(f" " * new_width + '/_/ /_/_/  |_/_____/    /_/  \\__,_/_/|_/_/  ' + " " * new_width)
-    print()
-    print(f"{title:^{width}}")
-    print(f"{'-' * width}")
-    print()
+
+# get constants
+TODAY = datetime.datetime.today()
 
 
 ##############################################
@@ -80,7 +70,6 @@ def GetRows(FilePath, StartDate_dt, EndDate_dt):
 
 
 
-
 def PrintRevRows(Rows, Ctr, Acc):
 
     # Generate report
@@ -116,11 +105,9 @@ def PrintExpRows(Rows, Ctr, Acc):
 
 
 
-
-
-###############################
-# Options for summary reports #
-###############################
+########################################################
+# Define Functions to Calculate info For Summary Reports
+########################################################
 
 def CalculateRevSummary(StartDate_dt, EndDate_dt):
 
@@ -208,7 +195,7 @@ def CalculateExpSummary(StartDate_dt, EndDate_dt):
                 ExpLst = ExpRecord.split(",")
     
                 InvDate = ExpLst[1].strip()
-                InvDate_dt = datetime.datetime.strptime(InvDate, "%Y-%m-%d")
+                InvDate_dt = get_date_string(InvDate)
                 Description = ExpLst[3].strip()
                 Total = float(ExpLst[6].strip())
     
@@ -245,7 +232,9 @@ def CalculateExpSummary(StartDate_dt, EndDate_dt):
 
         return ExpCtr, ExpAcc, ExpByCat
 
-
+################################################
+# Print Summary Reports for Revenue and Expenses
+################################################
 
 
 def PrintRevSummary(StartDate_dt, EndDate_dt):
@@ -292,14 +281,14 @@ def PrintExpSummary(StartDate_dt, EndDate_dt):
 
     print("\nTop Expenses by Category:")
     for category, expense in Top3_Exp.items():
-        print(f"    {category}: ${expense}")
+        print(f"    {category}: {FV.FDollar2(expense)}")
 
 
 
 
-#############
+##################################################
 # main program starts here    
-#############
+##################################################
 
 
 def GenerateFinancialReport(type):
@@ -309,15 +298,30 @@ def GenerateFinancialReport(type):
 
     # # Get the start and end dates for the report
 
-    # StartDate = input("Enter the start date (YYYY-MM-DD): ")
-    # EndDate = input("Enter the end date (YYYY-MM-DD): ")
+
+    # while True:
+    #     StartDate = get_date_string("Enter the start date (YYYY-MM-DD): ")
+    #     if TODAY < StartDate:
+    #         print("Start date must be earlier than the current date. Please try again.")
+    #     else:
+    #         break
+
+
+    # while True:
+    #     EndDate = get_date_string("Enter the end date (YYYY-MM-DD): ")
+    #     if EndDate < StartDate:
+    #         print("End date must be greater than start date. Please try again.")
+    #     else:
+    #         break
+
 
     # Convert input dates to datetime objects
-    StartDate_dt = datetime.datetime.strptime(StartDate, '%Y-%m-%d')
-    EndDate_dt = datetime.datetime.strptime(EndDate, '%Y-%m-%d')
+    StartDate_dt = convert_to_datetime(StartDate)
+    EndDate_dt = convert_to_datetime(EndDate)
 
 
-# set report width
+
+# Set report width
     width = int(86)
 
 # Generate report headings
@@ -349,7 +353,7 @@ def GenerateFinancialReport(type):
     ProfitOrLoss = RevenueAcc - ExpensesAcc
     ProfitOrLossStr = FV.FDollar2(ProfitOrLoss)
 
-# generate footers 
+# Generate footers 
     ListingFooter = f"\n{'END OF LISTING':^{width}}\n\n"
     
 
@@ -386,4 +390,4 @@ def GenerateFinancialReport(type):
 
 
 if __name__ == "__main__":
-    GenerateFinancialReport("profit summary")
+    GenerateFinancialReport("profit")

@@ -21,7 +21,9 @@ def get_user_info(prompt):
  
 
 
-# personal information
+##########################################
+# Validation for contact info
+##########################################
  
 def get_user_phone(prompt):   
 # input validation for phone number
@@ -75,9 +77,21 @@ def get_user_pc(prompt):
             print(" ** Invalid input, please enter the postal code in the form A1B 2C3. **")
 
 
-
-
 def get_user_contact():
+    first_name =  get_user_info("First Name:     ")
+    last_name =   get_user_info("Last Name:      ")
+    street_add =  get_user_info("Street:         ")
+    city_add =    get_user_info("City:           ")
+    prov_add =    get_user_prov("Province:       ")
+    pc_add =        get_user_pc("Postal Code:    ")
+    phone_num =  get_user_phone("Phone Number:   ")
+ 
+    return first_name, last_name, street_add, city_add, prov_add, pc_add, phone_num
+
+
+
+
+def get_user_contact_dict():
     first_name =  get_user_info("First Name:     ")
     last_name =   get_user_info("Last Name:      ")
     street_add =  get_user_info("Street:         ")
@@ -97,7 +111,9 @@ def get_user_contact():
     }
 
 
-# input validation for options
+##########################################
+# Validation for Options (list, dictionary)
+##########################################
 
 def get_user_yesno(prompt):   
 # retrives extra options in required 'Y' or 'N' format
@@ -136,15 +152,10 @@ def get_dict_option(prompt, dict_option):
 
 
 
-# input validation for numbers
+##########################################
+# Validation for Numbers
+##########################################
 
-def get_user_date(prompt):
-    while True:
-        date = input(prompt).strip()
-        try:
-            return datetime.strptime(date, '%Y-%m-%d')
-        except ValueError:
-            print(" ** Invalid date format. Please enter the date in YYYY-MM-DD format. **")
 
 
 def get_user_int(prompt):
@@ -167,6 +178,23 @@ def get_user_float(prompt):
             return digits
         except ValueError:
             print(" ** That's not a valid number. Please enter a number. **")
+
+
+
+
+
+
+##########################################
+# Validation for Dates
+##########################################
+
+def get_date_string(prompt):
+    while True:
+        date = input(prompt).strip()
+        try:
+            return datetime.strptime(date, '%Y-%m-%d')
+        except ValueError:
+            print(" ** Invalid date format. Please enter the date in YYYY-MM-DD format. **")
 
 
 def get_year(prompt): 
@@ -225,6 +253,10 @@ def ValidateDate(date_text):
 
 
 
+##########################################
+# Validation for Cars
+##########################################
+
 def get_plate_number(prompt):
 # input validation for Canadian car plate number
     while True:
@@ -240,8 +272,9 @@ def get_plate_number(prompt):
 
 
 
-
+###########################################
 # input validation for credit card
+###########################################
 
 def get_exp_date(prompt): 
 # input validation for year (MM/YY); should be updated if want year to be a current-ish year
@@ -272,3 +305,27 @@ def get_credit_card(prompt):
             print(" ** Credit card number must be between 13 and 19 digits long. **")
         else:
             return card_number
+
+
+
+##########################################################
+# Password Handling
+###########################################################
+
+
+# Check if the password is correct
+def check_password(password):
+    password_attempt = 0
+    while True:
+        password_attempt += 1
+        password_check = input("Password: ")  
+        if password_check == password:
+            print("\nLogin successful!")
+            break
+        elif password_attempt in [1,2]:
+            print(f" ** Incorrect password. Please try again. You have {4-password_attempt} attempts remaining.")
+        elif password_attempt == 3:
+            print(f" ** Incorrect password. Please try again. You have 1 attempt remaining.")
+        else:
+            exit(" ** Too many attempts. Please contact customer service.")
+

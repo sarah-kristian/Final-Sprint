@@ -1,6 +1,5 @@
 import datetime
-import time
-import sys
+from handlers.utility import blink_message
 
 # Define File Paths
 EmployeeFile = 'python-group3/data_files/employees.dat'
@@ -18,16 +17,6 @@ with open(DefaultsFile, "r") as f:
     HST_RATE = float(lines[-1].strip())
 
 
-
-def blink_message(message, duration=3):
-    end_time = time.time() + duration
-    while time.time() < end_time:
-        sys.stdout.write(f"\r{message}   ")
-        sys.stdout.flush()
-        time.sleep(0.5)
-        sys.stdout.write(f"\r{' ' * len(message)}   ")
-        sys.stdout.flush()
-        time.sleep(0.5)
 
 
 def charge_stand_fees():

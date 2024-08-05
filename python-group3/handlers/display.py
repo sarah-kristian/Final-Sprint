@@ -8,6 +8,11 @@ from datetime import datetime
 
 
 
+###########################################
+# Display contact info
+###########################################
+
+
 def pc_add_dsp(postal_code):
 # Returns a postal code in this format: A1A 1A1
     formatted_pc = (f"{postal_code[0]}{postal_code[1]}{postal_code[2]} {postal_code[3]}{postal_code[4]}{postal_code[5]}")
@@ -29,10 +34,24 @@ def phone_num_dsp(number):
     f"{number[6]}{number[7]}{number[8]}{number[9]}")
     return formatted_number
 
+
+
+
+###########################################
+# Display car info
+###########################################
+
 def plate_number_dsp(plate_number):
 # Returns a plate number in this format: AAA 111
     formatted_plate_num = (f"{plate_number[0:3]} {plate_number[3:6]}")
     return formatted_plate_num
+
+
+
+
+###########################################
+# Display floats and ints
+###########################################
 
 
 def dollar_dsp_wl(value, label):     
@@ -64,6 +83,13 @@ def percent_dsp(value):
     formatted_value = f"{value:>12.0%}"
     return formatted_value
 
+
+
+###########################################
+# Display dates
+###########################################
+
+
 def date_yyyy_dsp(date):
 # Function will accept a value and format it to yyyy-mm-dd.
     date = datetime.strftime(date, "%Y-%m-%d")
@@ -89,4 +115,6 @@ def date_dsp(date):
     return date
         #for key, value in user_contact.items():
         #    print(f"{key}: {value}")
+
+
 

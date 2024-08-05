@@ -6,10 +6,28 @@
 import os
 import sys
 import time
+import datetime
 
 # Clear the screen
 def clear_screen():
     os.system('clear')
+
+
+##########################################################
+# Date and Time Handling
+###########################################################
+
+def convert_to_datetime(date):
+    # Convert date string (format YYYY-MM-DD) to datetime object 
+    date_dt = datetime.datetime.strptime(date, '%Y-%m-%d')
+    return date_dt
+
+
+
+
+##########################################################
+# Handling Files
+###########################################################
 
 # Get the last ID from a file
 def get_last_id(file_path, default_id):
@@ -27,6 +45,25 @@ def get_last_id(file_path, default_id):
     except Exception as e:
         print(f"An error occurred while reading the file: {e}")
         return default_id
+
+
+# Turn file into a list
+def get_list_from_file(file):
+    data_list = []
+    with open(file, 'r') as f:
+        all_lines = f.readlines()
+        for one_line in all_lines:
+            entry = one_line.split(',')
+            data_list.append(entry)
+    return data_list
+
+
+
+
+
+##########################################################
+# Progress Indicators
+###########################################################
 
 
 # Generate progress indicator
@@ -50,19 +87,53 @@ def ProgressBar(iteration, total, prefix='', suffix='', length=30, fill='█'):
     sys.stdout.flush()
 
 
-# Check if the password is correct
-def check_password(password):
-    password_attempt = 0
-    while True:
-        password_attempt += 1
-        password_check = input("Password: ")  
-        if password_check == password:
-            print("\nLogin successful!")
-            break
-        elif password_attempt in [1,2]:
-            print(f" ** Incorrect password. Please try again. You have {4-password_attempt} attempts remaining.")
-        elif password_attempt == 3:
-            print(f" ** Incorrect password. Please try again. You have 1 attempt remaining.")
-        else:
-            exit(" ** Too many attempts. Please contact customer service.")
+def blink_message(message, duration=3):
+    end_time = time.time() + duration
+    while time.time() < end_time:
+        sys.stdout.write(f"\r{message}   ")
+        sys.stdout.flush()
+        time.sleep(0.5)
+        sys.stdout.write(f"\r{' ' * len(message)}   ")
+        sys.stdout.flush()
+        time.sleep(0.5)
 
+
+##########################################################
+# Dictionary Handling
+###########################################################
+
+
+def get_top_Xnum(dictionary, num):
+    num = int(num)
+    topX = dict(sorted(dictionary.items(), key=lambda item: item[1], reverse=True)[:num])
+    return topX
+
+def get_bottom_Xnum(dictionary, num):
+    bottomX = dict(sorted(dictionary.items(), key=lambda item: item[1])[:num])
+    return bottomX
+
+
+
+##########################################################
+# Specific to HAB Taxi
+###########################################################
+
+
+def print_header(title, width):
+    if width < 44:
+        width = int(44)
+        new_width = int(0)
+    else:
+        new_width = int((width-44)/2)
+
+    print()
+    print(f"{'-' * width}")
+    print(f" " * new_width + '    __  _____    ____     ______           _ ' + " " * new_width)
+    print(f" " * new_width + '   / / / /   |  / __ )   /_  __/___ __  __(_)' + " " * new_width)
+    print(f" " * new_width + '  / /_/ / /| | / __  |    / / / __ `/ |/_/ / ' + " " * new_width)
+    print(f" " * new_width + ' / __  / ___ |/ /_/ /    / / / /_/ />  </ /  ' + " " * new_width)
+    print(f" " * new_width + '/_/ /_/_/  |_/_____/    /_/  \\__,_/_/|_/_/  ' + " " * new_width)
+    print()
+    print(f"{title:^{width}}")
+    print(f"{'-' * width}")
+    print()
