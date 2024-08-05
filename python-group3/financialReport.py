@@ -136,6 +136,8 @@ def CalculateRevSummary(StartDate_dt, EndDate_dt):
     CarRentalAcc = 0
     ServiceFeesAcc = 0
     ProductSalesAcc = 0
+
+    RevByDriver = {}
     
     # Open the data file
     with open(RevenueFile, "r") as f:
@@ -145,6 +147,7 @@ def CalculateRevSummary(StartDate_dt, EndDate_dt):
             RevItem = RevRecord.split(",")
             TransDate = RevItem[1].strip()
             TransDate_dt = datetime.datetime.strptime(TransDate, "%Y-%m-%d")
+            Driver = RevItem[2].strip()
             Description = RevItem[3].strip()
             Total = float(RevItem[6].strip())
 
@@ -168,10 +171,16 @@ def CalculateRevSummary(StartDate_dt, EndDate_dt):
                     ProductSalesAcc += Total
                     ProductSalesCtr += 1
 
-    RevCtr = [TransCtr, StandFeesCtr, CarRentalCtr, ServiceFeesCtr, ProductSalesCtr]
-    RevAcc = [RevenueAcc, StandFeesAcc, CarRentalAcc, ServiceFeesAcc, ProductSalesAcc]   
+                # Accumulate totals by driver
+                if Driver in RevByDriver:
+                    RevByDriver[Driver] += Total
+                else:
+                    RevByDriver[Driver] = Total
 
-    return RevCtr, RevAcc
+    RevCtr = [StandFeesCtr, CarRentalCtr, ServiceFeesCtr, ProductSalesCtr]
+    RevAcc = [StandFeesAcc, CarRentalAcc, ServiceFeesAcc, ProductSalesAcc]   
+
+    return RevCtr, RevAcc, RevByDriver
 
 
 def CalculateExpSummary(StartDate_dt, EndDate_dt):
@@ -188,6 +197,8 @@ def CalculateExpSummary(StartDate_dt, EndDate_dt):
         OilChangeAcc = 0
         InspectionAcc = 0
         OtherExpensesAcc = 0
+
+        ExpByCat = {}
     
         # Open the data file
         with open(ExpensesFile, "r") as f:
@@ -220,47 +231,68 @@ def CalculateExpSummary(StartDate_dt, EndDate_dt):
                     else:
                         OtherExpensesAcc += Total
                         OtherExpensesCtr += 1
-    
-        ExpCtr = [InvCtr, TireChangeCtr, OilChangeCtr, InspectionCtr, OtherExpensesCtr]
-        ExpAcc = [ExpensesAcc, TireChangeAcc, OilChangeAcc, InspectionAcc, OtherExpensesAcc]
 
-        return ExpCtr, ExpAcc
+
+                    if Description in ExpByCat:
+                        ExpByCat[Description] += Total
+                    else:
+                        ExpByCat[Description] = Total
+
+    
+        ExpCtr = [TireChangeCtr, OilChangeCtr, InspectionCtr, OtherExpensesCtr]
+        ExpAcc = [TireChangeAcc, OilChangeAcc, InspectionAcc, OtherExpensesAcc]
+
+
+        return ExpCtr, ExpAcc, ExpByCat
 
 
 
 
 def PrintRevSummary(StartDate_dt, EndDate_dt):
 
-    RevCtr, RevAcc = CalculateRevSummary(StartDate_dt, EndDate_dt)
+    RevCtr, RevAcc, RevByDriver = CalculateRevSummary(StartDate_dt, EndDate_dt)
 
-    TransCtr, StandFeesCtr, CarRentalCtr, ServiceFeesCtr, ProductSalesCtr = RevCtr
-    RevenueAcc, StandFeesAcc, CarRentalAcc, ServiceFeesAcc, ProductSalesAcc = RevAcc
+    StandFeesCtr, CarRentalCtr, ServiceFeesCtr, ProductSalesCtr = RevCtr
+    StandFeesAcc, CarRentalAcc, ServiceFeesAcc, ProductSalesAcc = RevAcc
 
-        # Print summary data - counters and accumulators
-    #print("===================================================================================================")
-    #print(f"Total transactions: {TransCtr:<4d}                                                 Total Revenue: {FV.FDollar2(RevenueAcc):>11s}")
-    #print()
+    Top3_Rev = dict(sorted(RevByDriver.items(), key=lambda item: item[1], reverse=True)[:3])
+    Bottom3_Rev = dict(sorted(RevByDriver.items(), key=lambda item: item[1])[:3])
+
     print(f"Monthly Stand Fees: {StandFeesCtr} transactions, Total Amount: {FV.FDollar2(StandFeesAcc):>11s}")
     print(f"Car Rental        : {CarRentalCtr} transactions, Total Amount: {FV.FDollar2(CarRentalAcc):>11s}")
     print(f"Service Fees      : {ServiceFeesCtr} transactions, Total Amount: {FV.FDollar2(ServiceFeesAcc):>11s}")
     print(f"Product Sales     : {ProductSalesCtr} transactions, Total Amount: {FV.FDollar2(ProductSalesAcc):>11s}")
     print()
 
+    print("Top Drivers by Revenue:")
+    for driver, revenue in Top3_Rev.items():
+        print(f"    {driver}: ${revenue}")
+    
+    print("\nBottom Drivers by Revenue:")
+    for driver, revenue in Bottom3_Rev.items():
+        print(f"    {driver}: ${revenue}")
 
 
 def PrintExpSummary(StartDate_dt, EndDate_dt):
-    ExpCtr, ExpAcc = CalculateExpSummary(StartDate_dt, EndDate_dt)
+    # get calculated values
+    ExpCtr, ExpAcc, ExpByCat = CalculateExpSummary(StartDate_dt, EndDate_dt)
 
-    InvCtr, TireChangeCtr, OilChangeCtr, InspectionCtr, OtherExpensesCtr = ExpCtr
-    ExpensesAcc, TireChangeAcc, OilChangeAcc, InspectionAcc, OtherExpensesAcc = ExpAcc
+    TireChangeCtr, OilChangeCtr, InspectionCtr, OtherExpensesCtr = ExpCtr
+    TireChangeAcc, OilChangeAcc, InspectionAcc, OtherExpensesAcc = ExpAcc
 
-    #print("======================================================================================")
-    #print(f"Total invoices: {InvCtr:<4d}                                       Total Expenses: {FV.FDollar2(ExpensesAcc):>11s}")
-    #print()
+    Top3_Exp = dict(sorted(ExpByCat.items(), key=lambda item: item[1], reverse=True)[:3])
+    #Bottom3_Exp = dict(sorted(ExpByCat.items(), key=lambda item: item[1])[:3])
+
+    # print summary lines
     print(f"Repair parts: {TireChangeCtr} invoices, Total Amount: {FV.FDollar2(TireChangeAcc):>11s}")
     print(f"Oil change  : {OilChangeCtr} invoices, Total Amount: {FV.FDollar2(OilChangeAcc):>11s}")
     print(f"Inspection  : {InspectionCtr} invoices, Total Amount: {FV.FDollar2(InspectionAcc):>11s}")
     print(f"Other       : {OtherExpensesCtr} invoices, Total Amount: {FV.FDollar2(OtherExpensesAcc):>11s}")
+
+
+    print("\nTop Expenses by Category:")
+    for category, expense in Top3_Exp.items():
+        print(f"    {category}: ${expense}")
 
 
 
@@ -290,16 +322,20 @@ def GenerateFinancialReport(type):
 
 # Generate report headings
     if "summary" in type:
-        print_header("Summary Report", width)
+        print()
+        print(f"{'='*width}")
+        print(f"{'Financial Summary Report':^{width}}")
+        print(f"{'='*width}")
+        print()
     elif "revenue" in type:
-        print_header("Revenue Report", width)
+        print_header("Revenue Listing Report", width)
     elif "expenses" in type:
-        print_header("Expenses Report", width)
+        print_header("Expenses Listing Report", width)
     elif "profit" in type:
-        print_header("Profit Report", width)
+        print_header("Profit Listing Report", width)
 
-    RevenueHeader = f"{'Expense Listing Report':^{width}}\n"
-    ExpensesHeader = f"{'Expense Listing Report':^{width}}\n"
+    RevenueHeader = f"{'Revenue Listing':^{width}}\n"
+    ExpensesHeader = f"{'Expense Listing':^{width}}\n"
     DateLine = f"From {StartDate} to {EndDate}"
 
 
@@ -350,4 +386,4 @@ def GenerateFinancialReport(type):
 
 
 if __name__ == "__main__":
-    GenerateFinancialReport("profit")
+    GenerateFinancialReport("profit summary")

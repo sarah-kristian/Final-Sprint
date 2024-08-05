@@ -10,6 +10,7 @@ import sys
 import time
 import handlers.utility as util
 import handlers.validation as val
+from financialReport import GenerateFinancialReport
 
 # define global variables
 EmployeeFile = 'python-group3/data_files/employees.dat'
@@ -33,20 +34,33 @@ def get_list_from_file(file):
     return data_list
 
 
+def get_top_X(dictionary, num):
+    num = int(num)
+    topX = dict(sorted(dictionary.items(), key=lambda item: item[1], reverse=True)[:num])
+    return topX
+
+def get_bottom_X(dictionary, num):
+    bottomX = dict(sorted(dictionary.items(), key=lambda item: item[1])[:num])
+    return bottomX
 
 
+def print_header(title, width):
+    if width < 44:
+        width = int(44)
+        new_width = int(0)
+    else:
+        new_width = int((width-44)/2)
 
-def print_header(prompt):
     print()
-    print("-----------------------------------------------------------------------")
-    print("            __  _____    ____     ______           _ ")
-    print("           / / / /   |  / __ )   /_  __/___ __  __(_)")
-    print("          / /_/ / /| | / __  |    / / / __ `/ |/_/ / ")
-    print("         / __  / ___ |/ /_/ /    / / / /_/ />  </ /  ")
-    print("        /_/ /_/_/  |_/_____/    /_/  \\__,_/_/|_/_/   ")
+    print(f"{'-' * width}")
+    print(f" " * new_width + '    __  _____    ____     ______           _ ' + " " * new_width)
+    print(f" " * new_width + '   / / / /   |  / __ )   /_  __/___ __  __(_)' + " " * new_width)
+    print(f" " * new_width + '  / /_/ / /| | / __  |    / / / __ `/ |/_/ / ' + " " * new_width)
+    print(f" " * new_width + ' / __  / ___ |/ /_/ /    / / / /_/ />  </ /  ' + " " * new_width)
+    print(f" " * new_width + '/_/ /_/_/  |_/_____/    /_/  \\__,_/_/|_/_/  ' + " " * new_width)
     print()
-    print(f"                       {prompt}")
-    print("-----------------------------------------------------------------------")
+    print(f"{title:^{width}}")
+    print(f"{'-' * width}")
     print()
 
 
@@ -55,156 +69,105 @@ def print_header(prompt):
 # Summaries
 ##############################
 
-def employee_overview():
-
-    # get data from file
-    employees = get_list_from_file(EmployeeFile)
+def print_employee_report():
+    width = 86
 
     # initialize counters and accumulators
     num_employees = 0
     num_own_car = 0
     num_company_car = 0
     num_bal_due = 0
-    city_dict = {}
 
+    ins_company_dict = {}
+    city_dict = {}
+    balance_dict = {}
+
+
+    # get data from file
+    employee_data = get_list_from_file(EmployeeFile)
+    
     # calculate number of employees
-    num_employees = len(employees)
+    num_employees = len(employee_data)
+
+    for line in employee_data:
+        employee_ID = line[0].strip()
+        city = line[4].strip()
+        insurance_company = line[9].strip()
+        own_car = line[-2].strip()
+        balance = float(line[-1])
+
 
     # calculate number of employees by city
-    city_dict = {}
-    for employee in employees:
-        city = employee[4]
         if city in city_dict:
             city_dict[city] += 1
         else:
             city_dict[city] = 1
 
-    # calulate number of drivers with own cars and company cars
-    num_own_car = 0
-    num_company_car = 0
+    # calculate number of employees by insurance company
+        if insurance_company in ins_company_dict:
+            ins_company_dict[insurance_company] += 1
+        else:
+            ins_company_dict[insurance_company] = 1
 
-    for employee in employees:
-        if employee[-2] == 'Y':
+    # calulate number of drivers with own cars and company cars
+
+        if own_car == 'Y':
             num_own_car += 1
         else:
             num_company_car += 1
 
     # calculate number of employees with balance owing
-    num_bal_due = 0
-    for employee in employees:
-        if float(employee[-1]) > 0:
+        if balance > 0:
             num_bal_due += 1        
 
 
     # calculate employee metrics
-    # Average Balance Due per Driver: $X,X
 
-    balance_dict = {}
-    for employee in employees:
-        balance = employee[-1]
-        if employee in balance_dict:
-            balance_dict[balance] += 1
+        if employee_ID in balance_dict:
+            balance_dict[employee_ID] += balance
         else:
-            balance_dict[balance] = 1
+            balance_dict[employee_ID] = balance
 
-    print(balance_dict)
-    # Top-Performing Drivers:
-    # Driver 6: $XX,
-    # Driver 5: $XX,
-    # Driver 4: $XX,
-
+    # calculate average balance due
+    avg_bal_due = sum(balance_dict.values()) / len(balance_dict)
+    highest_bal_due = max(balance_dict.values())
+    lowest_bal_due = min(balance_dict.values())
+    top3_bal = get_top_X(balance_dict, 3)
+    
 
 
     # display results
-    print("\nEmployee Overview\n")
+    print()
+    print(f"{'=' * width}")
+    print(f"{'Employee Summary Report':^{width}}")
+    print(f"{'=' * width}")
+
+    print()
     print(f"Total Number of Employees: {num_employees}")
     print(f"Drivers with Own Cars: {num_own_car}")
     print(f"Drivers Using Company Cars: {num_company_car}")
+    print()
     print(f"Employees with balance owing: {num_bal_due}")
-    print("Employees by City:")
+    print(f"Average Balance Due: ${avg_bal_due}")
+    print(f"Highest Balance Due: ${highest_bal_due}")
+    print(f"Lowest Balance Due: ${lowest_bal_due}")
+
+    print("\nEmployees by City:")
     for city, count in city_dict.items():
         print(f"    {city}: {count}")
 
-    #return num_employees, num_own_car, num_company_car, num_bal_due, city_dict
+    print("\nEmployees by Insurance Company:")
+    for company, count in ins_company_dict.items():
+        print(f"    {company}: {count}")
 
 
-def revenue_overview():
-    # get data from files
-    revenues = get_list_from_file(RevenuesFile)
+    print("\nDrivers with highest balance:")
+    for driver, balance in top3_bal.items():
+        print(f"    Driver {driver}: ${balance}")
 
-    # initialize counters and accumulators
-    total_revenue = 0
-    total_hst = 0
-    revenue_by_driver = {}
-    monthly_stand_fees = 0
-    rental_fees = 0
+    print()
+    print(f"{'END OF REPORT':^{width}}\n\n")
 
-    for revenue_info in revenues:
-        total_revenue += float(revenue_info[-1])
-        total_hst += float(revenue_info[-2])
-        if revenue_info[2] == 'monthly stand fee'.strip().lower():
-            monthly_stand_fees += float(revenue_info[4])
-        if 'Rental Fee' in revenue_info[2]:
-            rental_fees += float(revenue_info[4])
-        driver = revenue_info[0]
-        if driver in revenue_by_driver:
-            revenue_by_driver[driver] += float(revenue_info[-1])
-        else:
-            revenue_by_driver[driver] = float(revenue_info[-1])
-
-    # display results
-    print("\nFinancial Overview: Revenues\n")
-    print(f"Total Revenue: ${total_revenue}")
-    print(f"Total HST Collected: ${total_hst}")
-    print("Revenue Breakdown by Driver:")
-    for driver, revenue in revenue_by_driver.items():
-        print(f"    {driver}: ${revenue}")
-    print(f"Monthly Stand Fees: ${monthly_stand_fees}")
-    print(f"Rental Fees: ${rental_fees}")
-    return total_revenue
-
-
-def expense_overview():
-    # get data from files
-    expenses = get_list_from_file(ExpensesFile)
-
-    # initialize counters and accumulators
-    total_expenses = 0
-    total_hst = 0
-    expenses_by_category = {}
-
-
-    # calculate total expenses, total HST, and expenses by category
-    for expense_info in expenses:
-        total_expenses += float(expense_info[-1])
-        total_hst += float(expense_info[-2])
-        category = expense_info[2]
-        if category in expenses_by_category:
-            expenses_by_category[category] += float(expense_info[-1])
-        else:
-            expenses_by_category[category] = float(expense_info[-1])
-
-    # display results
-    print("\nFinancial Overview: Expenses\n")
-    print(f"Total Expenses: ${total_expenses}")
-    print(f"Total HST on Expenses: ${total_hst}")
-    print("Expenses Breakdown by Category:")
-    for category, total in expenses_by_category.items():
-        print(f"    {category}: ${total}")
-
-    print("\n***** should we also add avg maintenance cost per car, and who was greatly above or below? *****")
-    return total_expenses
-
-
-def get_net_profit(profit, cost):
-
-    print("\nNet Profit/Loss:\n")
-    net_profit = profit - cost
-    print(f"Total Revenue: ${profit}")
-    print(f"Total Expenses: ${cost}")
-    print(f"Net Profit: ${net_profit}")
-
-    return net_profit
 
 ##############################
 # Detailed Metrics
@@ -218,7 +181,9 @@ def get_net_profit(profit, cost):
 
 
 def generate_report():
-    # Generate Report
+    print()
+
+
     # Report Generated On: 2024-08-07
     # Report Generated By: John Doe
     # Report Saved As: Corporate_Summary_Report_2024-08-07.txt
@@ -229,13 +194,16 @@ def generate_report():
     # [text in here maybe?]
 
 
-    print_header(HeaderMsg)
+    print_header(HeaderMsg, 86)
     print("\nWelcome to HAB Taxi's Summary Report.")
     print("Please provide the following information to do stuff\n")
 
 
-    overview = employee_overview
-    print(overview)
+    print(f"{'Report Generated On:':<30} {TODAY.strftime('%Y-%m-%d')}")
+    print_employee_report()
+    print("\n")
+    GenerateFinancialReport("profit summary")
+    
 
 
 
