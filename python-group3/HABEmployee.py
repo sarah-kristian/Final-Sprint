@@ -120,11 +120,12 @@ def create_new_account():
 
 
         StartDate = datetime.now()
-        StartDateDSP = StartDate.strftime("%Y-%m-%d")
+        StartDateDSP = dsp.FDateM(StartDate)
+        #StartDate.strftime("%Y-%m-%d")
 
         CurrentDay = StartDate.day
         RenewalDate = (datetime.now() + timedelta(weeks=RENEWAL_PD))
-        RenewalDateDSP = RenewalDate.strftime("%Y-%m-%d")
+        RenewalDateDSP = dsp.FDateM(RenewalDate)
 
         DaysInMonth = (StartDate.replace(month=StartDate.month % 12 + 1, day=1) - timedelta(days=1)).day     
 
@@ -149,7 +150,7 @@ def create_new_account():
 
         # Generating the customer ID receipt
 
-        BalanceDueDSP = f"${BalanceDue:.2f}"
+        BalanceDueDSP = f"{BalanceDue:.2f}"
         NameDSP = f"{DriverFirstName} {DriverSurname}"
 
         print()
@@ -167,8 +168,8 @@ def create_new_account():
         print(f"|  License No: {DrivLicNum:<9}            |")
         print(f"|  Expiry Date: {LicenseExpiry}          |")
         print("|                                   |")
-        print(f"|  Start Date: {StartDateDSP}           |") 
-        print(f"|  Renewal Date: {RenewalDateDSP}         |")  
+        print(f"|  Start Date: {StartDateDSP}            |") 
+        print(f"|  Renewal Date: {RenewalDateDSP}          |")  
         print("+-----------------------------------+")
         print()
 
