@@ -4,7 +4,7 @@
 
 
 # import libraries
-from handlers.utility import clear_screen
+from handlers.utility import clear_screen, print_header
 from financialReport import GenerateFinancialReport
 from HABEmployee import create_new_account
 
@@ -20,25 +20,6 @@ def draw_car():
     print(car)
     
 
-def print_header(title, width):
-    if width < 44:
-        width = int(44)
-        new_width = int(0)
-    else:
-        new_width = int((width-44)/2)
-
-    print()
-    print(f"{'-' * width}")
-    print(f"{' ' * new_width}" + '    __  _____    ____     ______           _ ')
-    print(f"{' ' * new_width}" + '   / / / /   |  / __ )   /_  __/___ __  __(_)')
-    print(f"{' ' * new_width}" + '  / /_/ / /| | / __  |    / / / __ `/ |/_/ / ')
-    print(f"{' ' * new_width}" + ' / __  / ___ |/ /_/ /    / / / /_/ />  </ /  ')
-    print(f"{' ' * new_width}" + '/_/ /_/_/  |_/_____/    /_/  \\__,_/_/|_/_/  ')
-    print()
-    print(f"{title:^{width}}")
-    print(f"{'-' * width}")
-    print()
-
 
 ############################################################################################################
 # Define Menu Functions
@@ -47,6 +28,7 @@ def print_header(title, width):
 
 def update_revenues():
     new_revenue = "This will be revenue info"
+    print(update_expenses)
 
     return new_revenue
 
@@ -102,14 +84,14 @@ def menu():
 
     options = [option1, option2, option3, option4, option5, option6, option7, option8, option9]
 
-    opt_num = 0
 
     footer_line = f"{'-' * width}"
 
 # main loop starts here
     while True:
         clear_screen()
-
+    # initialize variables
+        opt_num = 0
     # Display Menu
         print_header(header_msg, width)
         for option in options:
