@@ -20,6 +20,7 @@ RevenueFile = 'python-group3/data_files/revenue.dat'
 
 
 # get constants
+
 TODAY = datetime.datetime.today()
 
 
@@ -28,7 +29,44 @@ TODAY = datetime.datetime.today()
 ##############################################
 
 
+def GetRows(FilePath, StartDate_dt, EndDate_dt):
 
+    # Initialize counters and accumulators
+    Ctr = 0
+    Acc = 0
+    Rows = []
+
+
+    # Open the data file
+    
+    with open(FilePath, "r") as f:
+        # Process each line (record) in the file in a loop
+        for Record in f:
+            # Read the record and grab values from the list
+            RecordLine = Record.split(",")
+
+            RecordNum = RecordLine[0].strip()
+            TransDate = RecordLine[1].strip()
+            TransDate_dt = datetime.datetime.strptime(TransDate, "%Y-%m-%d")
+            idNum = RecordLine[2].strip()
+            Description = RecordLine[3].strip()
+            Subtotal = float(RecordLine[4].strip())
+            HST = float(RecordLine[5].strip())
+            Total = float(RecordLine[6].strip())
+
+            # Check if the revenue date falls within the specified date range
+            if StartDate_dt <= TransDate_dt <= EndDate_dt:
+
+                # Update counters and accumulators
+                Ctr += 1
+                Acc += Total
+
+                # Display the detail line
+                row = f"  {RecordNum:<9s}{FV.FDateM(TransDate_dt):<10s}{idNum:^12s}  {Description:<20s}{FV.FDollar2(Subtotal):>9s} {FV.FDollar2(HST):>9s} {FV.FDollar2(Total):>11s}"
+
+                Rows.append(row)
+    
+    return Rows, Ctr, Acc
 
 
 def PrintRevRows(Rows, Ctr, Acc):
@@ -258,7 +296,7 @@ def GenerateFinancialReport(type):
     StartDate = "2022-01-01"
     EndDate = "2022-03-05"
 
-    # # Get the start and end dates for the report
+    # Get the start and end dates for the report
 
 
     # while True:
@@ -352,4 +390,4 @@ def GenerateFinancialReport(type):
 
 
 if __name__ == "__main__":
-    GenerateFinancialReport("profit")
+    GenerateFinancialReport("profit summary")

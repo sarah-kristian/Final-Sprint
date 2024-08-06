@@ -28,7 +28,6 @@ def draw_car():
 
 def update_revenues():
     new_revenue = "This will be revenue info"
-    print(update_expenses)
 
     return new_revenue
 

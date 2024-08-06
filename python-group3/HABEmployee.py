@@ -6,51 +6,33 @@ import handlers.utility as util
 import handlers.validation as val
 import handlers.display as dsp
 
-# define global variables
+
+# Define global variables
 EmployeeFile = 'python-group3/data_files/employees.dat'
 DefaultsFile = 'python-group3/data_files/defaults.dat'
+
 HeaderMsg = "Employee Registration"
 RENEWAL_PD = int(26)
 
-#Assigning default data to constants
+# Assign default data to constants
 
-f = open(DefaultsFile, "r")
-lines = f.readlines()
-MONTH_STAND_FEE = float(lines[2].split()[0])
-DAILY_RENTAL_FEE = float(lines[3].split()[0])
-WEEKLY_RENTAL_FEE = float(lines[4].split()[0])
+with open(DefaultsFile, "r") as f:
+    lines = f.readlines()
+    NEW_TRANS_NUM = int(lines[0].strip())
+    DRIVER_NUMBER = int(lines[1].strip())
+    MONTH_STAND_FEE = float(lines[2].strip())
+    DAILY_RENTAL_FEE = float(lines[3].strip())
+    WEEKLY_RENTAL_FEE = float(lines[4].strip())
+    HST_RATE = float(lines[-1].strip())
 
-f.close()
-
-
-# define utility functions
+# define functions
     
-# def ValidatePostal(PostalCode):
-#     for char in PostalCode:
-#         if char.isalnum() == False:
-#             if char != "-":
-#                 return False
-#     return True
-
-
-# def ValidatePhone(PhoneNumber):
-#     if len(PhoneNumber) != 12:
-#         return False
-#     for i in range(len(PhoneNumber)):
-#         if i in [3, 7]:
-#             if PhoneNumber[i] != '-':
-#                 return False
-#         elif not PhoneNumber[i].isdigit():
-#             return False
-#     return True
-
-
-# def ValidateDate(date_text):
-#     try:
-#         datetime.strptime(date_text, '%Y-%m-%d')
-#         return True
-#     except ValueError:
-#         print("Data-entry error: please enter the date in the given format (YYYY-MM-DD).")
+def ValidateDate(date_text):
+    try:
+        datetime.strptime(date_text, '%Y-%m-%d')
+        return True
+    except ValueError:
+        print("Data-entry error: please enter the date in the given format (YYYY-MM-DD).")
 
 
 
@@ -63,15 +45,30 @@ def create_new_account():
     print("Please provide the following information to register a new driver:\n")
 
 
-    while True:
-        # Auto-generate DriverNumber
-        f = open(DefaultsFile, "r")
-        DriverNumber = int(f.readline().strip())
-        f.close()
 
-        f = open(DefaultsFile, "w")
-        f.write(str(DriverNumber + 1))
-        f.close()
+    while True:
+         # Auto-generate DriverNumber
+
+##########################
+# N.B.: I edit this part because you actuall get this info at the beginning of the program; 
+# I also got it to write all the lines to prevent it from erasing the remaining lines
+# in the defaults.dat file
+#########################
+
+
+    #     f = open(DefaultsFile, "r")
+    #     DriverNumber = int(f.readline().strip())
+    #     f.close()
+    
+        # f = open(DefaultsFile, "w")
+        # f.write(str(DriverNumber + 1))
+        # f.close()
+
+        with open(DefaultsFile, "w") as f:
+            lines[0] = str(NEW_TRANS_NUM + 1) + "\n"
+            lines[1] = str(DRIVER_NUMBER + 1) + "\n"
+            f.writelines(lines)
+
 
         #Data entry for driver contact information
         DriverFirstName = val.get_user_info("   Driver's first name:                  |   ").title().strip()
@@ -81,9 +78,9 @@ def create_new_account():
         
         
         PostalCode =        val.get_user_pc("   Driver's postal code (X#X #X#):       |   ")
-        PostalCode = dsp.pc_add_dsp(PostalCode)
+        PostalCodeDSP = dsp.pc_add_dsp(PostalCode)
         PhoneNumber =    val.get_user_phone("   Driver's phone number (###-###-####): |   ")
-        PhoneNumber = dsp.phone_num_dsp(PhoneNumber)
+        PhoneNumberDSP = dsp.phone_num_dsp(PhoneNumber)
 
     # Data entry for driver license information
         print("\n\nPlease provide the following driver's license information:\n")
@@ -94,8 +91,8 @@ def create_new_account():
             LicenseExpiry =           input("    License expiry date (YYYY-MM-DD):    |   ")
             if val.ValidateDate(LicenseExpiry):
                 break
-#            else:
-#                print("Data-entry error: please enter the date in the given format (YYYY-MM-DD).")
+            else:
+                print("Data-entry error: please enter the date in the given format (YYYY-MM-DD).")
 
 
 
@@ -122,10 +119,14 @@ def create_new_account():
                 print("Data-entry error: Please enter Y(for yes), or N(for no).")
 
 
-        StartDate = datetime.now().strftime("%Y-%m-%d")
+        StartDate = datetime.now()
+        StartDateDSP = StartDate.strftime("%Y-%m-%d")
+
         CurrentDay = StartDate.day
-        RenewalDate = (datetime.now() + timedelta(weeks=RENEWAL_PD)).strftime("%Y-%m-%d")
-        DaysInMonth = (StartDate.replace(month=StartDate.month % 12 + 1, days=1) - timedelta(days=1)).day     
+        RenewalDate = (datetime.now() + timedelta(weeks=RENEWAL_PD))
+        RenewalDateDSP = RenewalDate.strftime("%Y-%m-%d")
+
+        DaysInMonth = (StartDate.replace(month=StartDate.month % 12 + 1, day=1) - timedelta(days=1)).day     
 
     # Calculating the balance due
 
@@ -148,6 +149,7 @@ def create_new_account():
 
         # Generating the customer ID receipt
 
+        BalanceDueDSP = f"${BalanceDue:.2f}"
         NameDSP = f"{DriverFirstName} {DriverSurname}"
 
         print()
@@ -159,24 +161,28 @@ def create_new_account():
         print("|  [Driver Photo]                   |")
         print("|                                   |")
         print(f"|  Name: {NameDSP:<23}    |")
-        print(f"|  Driver ID: {DriverNumber:<6}                |")
+        print(f"|  Driver ID: {DRIVER_NUMBER:<6}                |")
         print("|  Job Title: Driver                |")
-        print(f"|  Phone: {PhoneNumber}            |")
+        print(f"|  Phone: {PhoneNumberDSP}            |")
         print(f"|  License No: {DrivLicNum:<9}            |")
         print(f"|  Expiry Date: {LicenseExpiry}          |")
         print("|                                   |")
-        print(f"|  Start Date: {StartDate}           |") 
-        print(f"|  Renewal Date: {RenewalDate}         |")  
+        print(f"|  Start Date: {StartDateDSP}           |") 
+        print(f"|  Renewal Date: {RenewalDateDSP}         |")  
         print("+-----------------------------------+")
         print()
 
         # Writing to data file 
 
         f = open(EmployeeFile, "a")
-
-        f.write(f"{DriverNumber},{DriverFirstName},{DriverSurname},{StreetAdd},{City},{PostalCode},{PhoneNumber},{DrivLicNum},{LicenseExpiry},{InsuranceCompany},{InsPolicyNum},{OwnsCar},{BalanceDue}\n")
-        
+        f.write(f"{DRIVER_NUMBER},{DriverFirstName},{DriverSurname},{StreetAdd},{City},{PostalCodeDSP},{PhoneNumberDSP},{DrivLicNum},{LicenseExpiry},{InsuranceCompany},{InsPolicyNum},{OwnsCar},{BalanceDueDSP}\n")
         f.close()
+
+
+
+    #####################
+    # Should we add a statment saying what the balance is or anything like that? I'm thinking no....
+    #####################
 
         AdditionalEntry = input("\nWould you like to enter another new employee into the system (Y/N)?: ").upper()
         if AdditionalEntry == "N":
