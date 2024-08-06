@@ -1,75 +1,64 @@
 # import libraries
 
 from datetime import datetime, timedelta
-import sys
 import time
 import handlers.utility as util
 import handlers.validation as val
-import handlers.display as dis
+import handlers.display as dsp
 
 # define global variables
 EmployeeFile = 'python-group3/data_files/employees.dat'
 DefaultsFile = 'python-group3/data_files/defaults.dat'
 HeaderMsg = "Employee Registration"
+RENEWAL_PD = int(26)
+
+#Assigning default data to constants
+
+f = open(DefaultsFile, "r")
+lines = f.readlines()
+MONTH_STAND_FEE = float(lines[2].split()[0])
+DAILY_RENTAL_FEE = float(lines[3].split()[0])
+WEEKLY_RENTAL_FEE = float(lines[4].split()[0])
+
+f.close()
 
 
-# define utlity functions
+# define utility functions
     
-def ValidatePostal(PostalCode):
-    for char in PostalCode:
-        if char.isalnum() == False:
-            if char != "-":
-                return False
-    return True
+# def ValidatePostal(PostalCode):
+#     for char in PostalCode:
+#         if char.isalnum() == False:
+#             if char != "-":
+#                 return False
+#     return True
 
 
-def ValidatePhone(PhoneNumber):
-    if len(PhoneNumber) != 12:
-        return False
-    for i in range(len(PhoneNumber)):
-        if i in [3, 7]:
-            if PhoneNumber[i] != '-':
-                return False
-        elif not PhoneNumber[i].isdigit():
-            return False
-    return True
+# def ValidatePhone(PhoneNumber):
+#     if len(PhoneNumber) != 12:
+#         return False
+#     for i in range(len(PhoneNumber)):
+#         if i in [3, 7]:
+#             if PhoneNumber[i] != '-':
+#                 return False
+#         elif not PhoneNumber[i].isdigit():
+#             return False
+#     return True
 
 
-def ValidateDate(date_text):
-    try:
-        datetime.strptime(date_text, '%Y-%m-%d')
-        return True
-    except:
-        return False
+# def ValidateDate(date_text):
+#     try:
+#         datetime.strptime(date_text, '%Y-%m-%d')
+#         return True
+#     except ValueError:
+#         print("Data-entry error: please enter the date in the given format (YYYY-MM-DD).")
 
-
-#define display functions
-
-def print_header(title, width):
-    if width < 44:
-        width = int(44)
-        new_width = int(0)
-    else:
-        new_width = int((width-44)/2)
-
-    print()
-    print(f"{'-' * width}")
-    print(f" " * new_width + '    __  _____    ____     ______           _ ' + " " * new_width)
-    print(f" " * new_width + '   / / / /   |  / __ )   /_  __/___ __  __(_)' + " " * new_width)
-    print(f" " * new_width + '  / /_/ / /| | / __  |    / / / __ `/ |/_/ / ' + " " * new_width)
-    print(f" " * new_width + ' / __  / ___ |/ /_/ /    / / / /_/ />  </ /  ' + " " * new_width)
-    print(f" " * new_width + '/_/ /_/_/  |_/_____/    /_/  \\__,_/_/|_/_/  ' + " " * new_width)
-    print()
-    print(f"{title:^{width}}")
-    print(f"{'-' * width}")
-    print()
 
 
 # Main program
 
 def create_new_account():
 
-    print_header(HeaderMsg, 80)
+    util.print_header(HeaderMsg, 80)
     print("\nWelcome to HAB Taxi's Employee Registration system.")
     print("Please provide the following information to register a new driver:\n")
 
@@ -84,33 +73,39 @@ def create_new_account():
         f.write(str(DriverNumber + 1))
         f.close()
 
-    # Data entry for driver contact information
+        #Data entry for driver contact information
         DriverFirstName = val.get_user_info("   Driver's first name:                  |   ").title().strip()
-        DriverSurname =               input("   Driver's surname:                     |   ").title().strip()
-        StreetAdd =                   input("   Driver's street address:              |   ").title().strip()
-        City =                        input("   Driver's city:                        |   ").title().strip()
+        DriverSurname =   val.get_user_info("   Driver's surname:                     |   ").title().strip()
+        StreetAdd =       val.get_user_info("   Driver's street address:              |   ").title().strip()
+        City =            val.get_user_info("   Driver's city:                        |   ").title().strip()
         
         
         PostalCode =        val.get_user_pc("   Driver's postal code (X#X #X#):       |   ")
+        PostalCode = dsp.pc_add_dsp(PostalCode)
         PhoneNumber =    val.get_user_phone("   Driver's phone number (###-###-####): |   ")
+        PhoneNumber = dsp.phone_num_dsp(PhoneNumber)
 
     # Data entry for driver license information
         print("\n\nPlease provide the following driver's license information:\n")
         DrivLicNum =                  input("    License number:                      |   ")
 
+
         while True:
             LicenseExpiry =           input("    License expiry date (YYYY-MM-DD):    |   ")
             if val.ValidateDate(LicenseExpiry):
                 break
-            else:
-                print("Data-entry error: please enter the date in the given format (YYYY-MM-DD).")
+#            else:
+#                print("Data-entry error: please enter the date in the given format (YYYY-MM-DD).")
+
+
+
 
     # Data entry for driver insurance information
         print("\n\nPlease provide the following insurance information:\n")
-        InsuranceCompany =            input("    Associated insurance company:        |   ")
+        InsuranceCompany = val.get_user_info("    Associated insurance company:        |   ")
 
         while True:
-            InsPolicyNum =            input("    Insurance policy number:             |   ")
+            InsPolicyNum = val.get_user_info("    Insurance policy number:             |   ")
             try:
                 int(InsPolicyNum)
                 break
@@ -126,19 +121,30 @@ def create_new_account():
             else:
                 print("Data-entry error: Please enter Y(for yes), or N(for no).")
 
-    ##################################
-    #       Do we need this?         #
-    ##################################
-
-        while True:
-            try:
-                BalanceDue = float(input("\nBalance Due: "))
-                break
-            except:
-                print("Data-entry error: Please ensure that the balance due is a valid number.")
 
         StartDate = datetime.now().strftime("%Y-%m-%d")
-        RenewalDate = (datetime.now() + timedelta(weeks=26)).strftime("%Y-%m-%d")        
+        CurrentDay = StartDate.day
+        RenewalDate = (datetime.now() + timedelta(weeks=RENEWAL_PD)).strftime("%Y-%m-%d")
+        DaysInMonth = (StartDate.replace(month=StartDate.month % 12 + 1, days=1) - timedelta(days=1)).day     
+
+    # Calculating the balance due
+
+        if OwnsCar == "Y":
+            BalanceDue = (MONTH_STAND_FEE / DaysInMonth) * (DaysInMonth - CurrentDay + 1)
+
+        else:
+            while True:
+                RentalType = input("    Is the vehicle a daily rental or weekly rental? (D/W): ")[0].upper()
+
+                if RentalType in ["D", "W"]:
+                    if RentalType == "D":
+                        BalanceDue = DAILY_RENTAL_FEE * (DaysInMonth - CurrentDay + 1)
+
+                    elif RentalType == "W":
+                        BalanceDue = WEEKLY_RENTAL_FEE
+                    break
+                else:
+                    print("Data-entry error: Please enter D(for daily), or W(for weekly).")   
 
         # Generating the customer ID receipt
 
@@ -155,12 +161,12 @@ def create_new_account():
         print(f"|  Name: {NameDSP:<23}    |")
         print(f"|  Driver ID: {DriverNumber:<6}                |")
         print("|  Job Title: Driver                |")
-        print(f"|  Phone: {dis.phone_num_dsp(PhoneNumber)}            |")
+        print(f"|  Phone: {PhoneNumber}            |")
         print(f"|  License No: {DrivLicNum:<9}            |")
         print(f"|  Expiry Date: {LicenseExpiry}          |")
         print("|                                   |")
         print(f"|  Start Date: {StartDate}           |") 
-        print(f"|  Renewal Date: {RenewalDate}         |")  # Placeholder date
+        print(f"|  Renewal Date: {RenewalDate}         |")  
         print("+-----------------------------------+")
         print()
 
@@ -188,7 +194,6 @@ def create_new_account():
     print("Thank you for using HAB Taxi's Employee Registration system.")
     print()
     print("Have a great day!\n")
-
 
 if __name__ == "__main__":
     create_new_account()

@@ -188,13 +188,13 @@ def get_user_float(prompt):
 # Validation for Dates
 ##########################################
 
-def get_date_string(prompt):
-    while True:
-        date = input(prompt).strip()
-        try:
-            return datetime.strptime(date, '%Y-%m-%d')
-        except ValueError:
-            print(" ** Invalid date format. Please enter the date in YYYY-MM-DD format. **")
+
+def ValidateDate(date_text):
+    try:
+        datetime.strptime(date_text, '%Y-%m-%d')
+        return True
+    except ValueError:
+        print("Data-entry error: please enter the date in the given format (YYYY-MM-DD).")
 
 
 def get_year(prompt): 
@@ -211,6 +211,13 @@ def get_year(prompt):
         year = int(year)
         return year
 
+def get_date_string(prompt):
+    while True:
+        date = input(prompt).strip()
+        try:
+            return datetime.strptime(date, '%Y-%m-%d')
+        except ValueError:
+            print(" ** Invalid date format. Please enter the date in YYYY-MM-DD format. **")
 
 
 def get_year_between(prompt, start, end):
