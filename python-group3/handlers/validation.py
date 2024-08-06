@@ -211,7 +211,7 @@ def get_year(prompt):
         year = int(year)
         return year
 
-def get_date_string(prompt):
+def get_date_dt(prompt):
     while True:
         date = input(prompt).strip()
         try:

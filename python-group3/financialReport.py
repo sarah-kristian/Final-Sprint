@@ -8,7 +8,7 @@
 import datetime
 import handlers.display as FV  
 from handlers.utility import print_header, convert_to_datetime
-from handlers.validation import get_date_string
+from handlers.validation import get_date_dt
 
 
 
@@ -47,7 +47,7 @@ def GetRows(FilePath, StartDate_dt, EndDate_dt):
 
             RecordNum = RecordLine[0].strip()
             TransDate = RecordLine[1].strip()
-            TransDate_dt = datetime.datetime.strptime(TransDate, "%Y-%m-%d")
+            TransDate_dt = convert_to_datetime(TransDate)
             idNum = RecordLine[2].strip()
             Description = RecordLine[3].strip()
             Subtotal = float(RecordLine[4].strip())
@@ -133,7 +133,7 @@ def CalculateRevSummary(StartDate_dt, EndDate_dt):
             # Read the record and grab values from the list
             RevItem = RevRecord.split(",")
             TransDate = RevItem[1].strip()
-            TransDate_dt = datetime.datetime.strptime(TransDate, "%Y-%m-%d")
+            TransDate_dt = convert_to_datetime(TransDate)
             Driver = RevItem[2].strip()
             Description = RevItem[3].strip()
             Total = float(RevItem[6].strip())
@@ -195,7 +195,7 @@ def CalculateExpSummary(StartDate_dt, EndDate_dt):
                 ExpLst = ExpRecord.split(",")
     
                 InvDate = ExpLst[1].strip()
-                InvDate_dt = get_date_string(InvDate)
+                InvDate_dt = convert_to_datetime(InvDate)
                 Description = ExpLst[3].strip()
                 Total = float(ExpLst[6].strip())
     
@@ -293,31 +293,32 @@ def PrintExpSummary(StartDate_dt, EndDate_dt):
 
 def GenerateFinancialReport(type):
     # For testing purposes, use the following hard-coded dates
-    StartDate = "2022-01-01"
-    EndDate = "2022-03-05"
+
+    # StartDate_dt = convert_to_datetime("2022-01-01")
+    # EndDate_dt = convert_to_datetime("2022-03-05")
 
     # Get the start and end dates for the report
+    print("\nEnter the date range for the report.\n")
+
+    while True:
+        StartDate_dt = get_date_dt("Enter the start date (YYYY-MM-DD): ")
+        if TODAY < StartDate_dt:
+            print("Start date must be earlier than the current date. Please try again.")
+        else:
+            break
 
 
-    # while True:
-    #     StartDate = get_date_string("Enter the start date (YYYY-MM-DD): ")
-    #     if TODAY < StartDate:
-    #         print("Start date must be earlier than the current date. Please try again.")
-    #     else:
-    #         break
+    while True:
+        EndDate_dt = get_date_dt("Enter the end date (YYYY-MM-DD): ")
+        if EndDate_dt < StartDate_dt:
+            print("End date must be greater than start date. Please try again.")
+        else:
+            break
+
+    StartDate = FV.FDateM(StartDate_dt)
+    EndDate = FV.FDateM(EndDate_dt)
 
 
-    # while True:
-    #     EndDate = get_date_string("Enter the end date (YYYY-MM-DD): ")
-    #     if EndDate < StartDate:
-    #         print("End date must be greater than start date. Please try again.")
-    #     else:
-    #         break
-
-
-    # Convert input dates to datetime objects
-    StartDate_dt = convert_to_datetime(StartDate)
-    EndDate_dt = convert_to_datetime(EndDate)
 
 
 
@@ -390,4 +391,4 @@ def GenerateFinancialReport(type):
 
 
 if __name__ == "__main__":
-    GenerateFinancialReport("profit summary")
+    GenerateFinancialReport("profit")
