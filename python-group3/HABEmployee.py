@@ -47,28 +47,6 @@ def create_new_account():
 
 
     while True:
-         # Auto-generate DriverNumber
-
-##########################
-# N.B.: I edit this part because you actuall get this info at the beginning of the program; 
-# I also got it to write all the lines to prevent it from erasing the remaining lines
-# in the defaults.dat file
-#########################
-
-
-    #     f = open(DefaultsFile, "r")
-    #     DriverNumber = int(f.readline().strip())
-    #     f.close()
-    
-        # f = open(DefaultsFile, "w")
-        # f.write(str(DriverNumber + 1))
-        # f.close()
-
-        with open(DefaultsFile, "w") as f:
-            lines[0] = str(NEW_TRANS_NUM + 1) + "\n"
-            lines[1] = str(DRIVER_NUMBER + 1) + "\n"
-            f.writelines(lines)
-
 
         #Data entry for driver contact information
         DriverFirstName = val.get_user_info("   Driver's first name:                  |   ").title().strip()
@@ -179,6 +157,23 @@ def create_new_account():
         f.write(f"{DRIVER_NUMBER},{DriverFirstName},{DriverSurname},{StreetAdd},{City},{PostalCodeDSP},{PhoneNumberDSP},{DrivLicNum},{LicenseExpiry},{InsuranceCompany},{InsPolicyNum},{OwnsCar},{BalanceDueDSP}\n")
         f.close()
 
+    # update the default values for the next entry
+
+
+    ##########################
+    # I moved this to the end of the loop so that the defaults file is only updated if the user is done entering the employee
+    #########################
+
+        f = open(DefaultsFile, "r")
+        lines = f.readlines()
+        f.close()
+
+        lines[0] = str(NEW_TRANS_NUM + 1) + "\n"
+        lines[1] = str(DRIVER_NUMBER + 1) + "\n"
+
+        f = open(DefaultsFile, "w")
+        f.writelines(lines)
+        f.close()
 
 
     #####################
@@ -188,7 +183,9 @@ def create_new_account():
         AdditionalEntry = input("\nWould you like to enter another new employee into the system (Y/N)?: ").upper()
         if AdditionalEntry == "N":
             break
-      
+
+
+
     # Progress bar + exit message
     print()
     print("Saving your entries...")
