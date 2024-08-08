@@ -1,4 +1,4 @@
-import time 
+
 
 # define global variables
 robot = robot_ctrl
