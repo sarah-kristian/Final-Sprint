@@ -7,6 +7,7 @@
 from handlers.utility import clear_screen, print_header
 from financialReport import GenerateFinancialReport
 from HABEmployee import create_new_account
+from corporateSummary import generate_report
 
 # define funtions
 def draw_car():
@@ -52,10 +53,6 @@ def print_driver_listing():
 
     return driver_list
 
-def generate_summary_report():
-    summary_report = "This will be a summary report"
-
-    return summary_report
 
 
 
@@ -127,7 +124,7 @@ def menu():
             print_driver_listing()
         elif choice == '8':
             clear_screen()
-            generate_summary_report()
+            generate_report()
         elif choice == '9':
             print()
             print("Thanks for using our services!")
