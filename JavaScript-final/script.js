@@ -276,8 +276,17 @@ fetch('storyData.json')
 
         console.log('Step 4: Loop through data and print to console.');
 
-        // Loop through all data
+        // Loop through sample data using forEach loop
+        console.log('  a) loop through sample data forEach loop:');
+        animateNouns.singular.forEach(function(noun) {
+          console.log(noun)});
 
+        animateNouns.plural.forEach(function(noun) {
+            console.log(noun)});
+
+            
+        // Loop through all data
+        console.log('  b) loop through all data:');
         printJson(data); // <-- chatGPT's version
       
         // Loop through all data (<-- Sarah's version)
