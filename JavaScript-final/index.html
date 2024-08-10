@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Final Sprint</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="story-container">
+      <h1>JSON, JavaScript, and MadLibs</h1>
+
+      <br />
+      <h2>Overview</h2>
+      <p>
+        This project is all about using JSON data to create strings. To this
+        end, I have developed madLibs-style story generator. We'll use a JSON
+        file to get word lists for nouns, adjectives, and verbs, and then use
+        those lists to create a story. We'll also create a class to help us
+        manipulate the story.
+      </p>
+      <h2>Steps 1 - 4: Getting Data from JSON file</h2>
+      <p>
+        Here, I'm using fetch to get data from a JSON file and display it on the
+        page. I'm also using a for loop to display the data in the console. To
+        see this, you can open the developer tools on your browser.
+      </p>
+
+      <h2>Step 5: Functions for displaying JSON content</h2>
+      <p>
+        The JSON file contains word lists for nouns, adjectives, and verbs and
+        default values for a story. We can use these to along with a class to
+        play something like madLibs!
+      </p>
+
+      <p>
+        To do this, we create <em>storyVersion</em> class that includes a
+        function to display data from the JSON file in a template literal. We'll
+        see how plays out in a moment, but first let's create two instances of
+        the story: the <em>defaultVersion</em> and the <em>randomVersion</em>.
+      </p>
+      <p>
+        The <em>defaultVersion</em> takes preset default values from the JSON
+        file.
+      </p>
+
+      <div class="function-container">
+        <h3>defaultVersion</h3>
+        <p></p>
+        <div id="funct0"></div>
+      </div>
+
+      <p>
+        The <em>randomVersion</em> is created similarly, but first random items
+        are selected from word lists in the JSON file to populate a instance
+        with random items.
+      </p>
+
+      <div class="function-container">
+        <h3>FUNCTION 1: get random item from list</h3>
+        <p>
+          Version 1: Returns a random item directly from an array. This is
+          useful for selecting a random word from a list adjectives, for
+          example.
+        </p>
+        <div id="funct1a"></div>
+        <br />
+
+        <p>
+          Version 2: Selects a random index number based on the length of an
+          array. This can be used to select the same index value for multiple
+          arrays (important for us becuase different tenses of the same verb are
+          in different arrays).
+        </p>
+        <div id="funct1b"></div>
+      </div>
+
+      <div class="function-container">
+        <h3>FUNCTION 2: creates a random instance of a class</h3>
+        <p>
+          Returns an instance of the class <em>storyVersion</em> using randomly
+          selected words from the JSON file.
+        </p>
+        <div id="funct2"></div>
+      </div>
+
+      <p>
+        Now that we have a random story, we can use the class methods to
+        manipulate the story.
+      </p>
+
+      <div class="function-container">
+        <h3>FUNCTION 3</h3>
+        <p>
+          Adds an adjective in front of each noun (noun --> adj noun). An
+          example is below (just the singular versions are shown):
+        </p>
+        <div id="funct3"></div>
+      </div>
+
+      <div class="function-container">
+        <h3>FUNCTION 4</h3>
+        <p>
+          Applies an instance to a template literal, giving us a retelling of
+          The Three Little Pigs (note that this iteration doesn't included the
+          updated nouns).
+        </p>
+
+        <div id="funct4"></div>
+      </div>
+      <p>You can refresh the page to get a new story each time.</p>
+    </div>
+    <footer>
+      <p>Created by Sarah Perry, Keyin College, Final term 1 project</p>
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,82 @@
+/* Reset some basic elements */
+body, p, h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    padding: 20px;
+    color: #333;
+}
+
+/* Style the story container */
+.story-container {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+/* Style the story container */
+.function-container {
+    background-color:  #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+footer {
+    text-align: center;
+    margin-top: 10px;
+}
+
+
+
+/* Style the paragraphs within the story */
+.story-container p {
+    margin-bottom: 15px;
+}
+
+/* Style for the nouns */
+.story-container .noun {
+    color: #d9534f;
+    text-decoration: underline;
+}
+
+/* Style for the adjectives */
+.story-container .adj {
+    color: #5bc0de;
+    font-weight: bold;
+}
+
+/* Style for the verbs */
+.story-container .verb {
+    color: #5cb85c;
+    font-style: italic;
+}
+
+/* Specific styles for headings */
+.story-container h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.story-container h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.story-container h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+
+}
