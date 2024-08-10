@@ -1,9 +1,23 @@
+// Description: MadLibs-Style Story Generator
+//    This script fetches data from a local JSON file and uses it to create a story.
+//    The story is a retelling of The Three Little Pigs with random words from the JSON file.
+
+// Author: Sarah Perry
+// Created: 2024-08-10
+
+
+
 // ANSI escape codes for styling
 const reset = "\x1b[0m";
 const bold = "\x1b[1m";
 const underline = "\x1b[4m";
 
 
+// Function to print JSON data in a readable format (created by chatGPT)
+//      This is a recursive function that will print the keys and values of an object
+//      If the value is an object, it will call itself to print the keys and values of the nested object
+//      If the value is an array, it will print the key and loop through the array
+//      Otherwise, it will print the key and value
 
 function printJson(obj, indent = 2) {
   const spacing = ' '.repeat(indent);
@@ -43,7 +57,7 @@ function getRandomIndex(array) {
 
 
 // FUNCTION 2: return random items from lists
-// Use this as a Method to create a randomly generated instance of a story
+//      Use this as a Method to create a randomly generated instance of a story
 function getRandomVersion(animateNouns, inanimateNouns, adjectives, verbs) {
   let randomIndex 
 
@@ -131,7 +145,7 @@ class storyVersion {
   // Story Methods (relevant for step 5)
 
   // FUNCTION 3: concatenate random adjectives to the nouns
-  // Method to grown nouns in story with random adjectives (N = Adj + N)
+  //      Method to grown nouns in story with random adjectives (N = Adj + N)
 
   growNoun(adjectives) {
     const newAdj1 = getRandomItem(adjectives);
@@ -150,8 +164,8 @@ class storyVersion {
   }
 
   // FUNCTION 4: Method to create a story
-  // Method to create a story with the current values of the instance and
-  // a template literal string
+  //      Method to create a story with the current values of the instance and
+  //      a template literal string
 
   getStory() {
     return `
@@ -233,7 +247,6 @@ class storyVersion {
     Well, she <u class="verb">${this.verb1.verb1b}</u> and she <u class="verb">${this.verb2.verb2b}</u>. She <u class="verb">${this.verb2.verb2b}</u> and she <u class="verb">${this.verb1.verb1b}</u>. And she <u class="verb">${this.verb1.verb1b}</u>, <u class="verb">${this.verb1.verb1b}</u>, and she <u class="verb">${this.verb2.verb2b}</u>, <u class="verb">${this.verb2.verb2b}</u>; but she could not blow the house down. At last, the <u class="noun">${this.noun2.noun2a}</u> was so out of breath that she couldn't <u class="verb">${this.verb1.verb1a}</u> and she couldn't <u class="verb">${this.verb2.verb2a}</u> anymore. So, she left and went to the restaurant further down the street.<br /><br />
     `;
   }
-
 }
 
 
@@ -263,41 +276,41 @@ fetch('storyData.json')
 
         console.log('Step 4: Loop through data and print to console.');
 
-        // Loop through all data (<-- this is a recursive function from chatGPT; my version follows, but is commented out)
-        // if the data contains a nested object, print the key, then loop through the nested object
-        // if the data contains an array, print the key, then loop through the array
-        // otherwise, print the key and value
+        // Loop through all data
 
-        printJson(data);
+        printJson(data); // <-- chatGPT's version
       
         // Loop through all data (<-- Sarah's version)
 
-        // console.log("  a) loop through all data:");
-        // for (const key in data) {
-        //     console.log(`     ${key}: ${data[key]}`);
-        // }
-        
-        // // Loop through Wordlists
-        // console.log("  b) loop through Wordlists:");
-        // for (const key in data.wordLists) {
-        //     console.log(`     ${key}: ${data.wordLists[key]}`);
-        // }
-        
-        // // Loop through default values
-        // console.log("  c) loop through Default Values:");
-        // for (const key in data.defaultValues) {
-        //     console.log(`     ${key}: ${data.defaultValues[key]}`);
-        // }
+            // console.log("  a) loop through all data:");
+            // for (const key in data) {
+            //     console.log(`     ${key}: ${data[key]}`);
+            // }
+            
+            // // Loop through Wordlists
+            // console.log("  b) loop through Wordlists:");
+            // for (const key in data.wordLists) {
+            //     console.log(`     ${key}: ${data.wordLists[key]}`);
+            // }
+            
+            // // Loop through default values
+            // console.log("  c) loop through Default Values:");
+            // for (const key in data.defaultValues) {
+            //     console.log(`     ${key}: ${data.defaultValues[key]}`);
+            // }
 
 
 
 // Before we go further, we need to process some data. 
+// First, we will create arrays to store the noun pairs, adjectives, and verb pairs.
+
+    // Initialize arrays to store the noun pairs, adjectives, and verb pairs
 
           let nounPairs = []
           let adjList = []
           let verbPairs = []
 
-    // get nouns
+    // Add animate nouns to the nounPairs array
           if (animateNouns && animateNouns.singular) {
             animateNouns.singular.forEach((noun, index) => {
                 // Save each pair as an array [singular, plural]
@@ -307,6 +320,7 @@ fetch('storyData.json')
             console.error('The animateNouns or singular is not defined in the JSON data');
         }
 
+    // Add inanimate nouns to the nounPairs array
           if (inanimateNouns && inanimateNouns.singular) {
           inanimateNouns.singular.forEach((noun, index) => {
               // Save each pair as an array [singular, plural]
@@ -316,12 +330,12 @@ fetch('storyData.json')
             console.error('the (in)animate noun or singular is not defined in the JSON data');
           }
 
-    // get adjectives
+    // Add adjectives to the adjList array
           adjectives.forEach((adj) => {
             adjList.push(adj);
           });
 
-    // get verbs
+    // Add verbs to the verbPairs array
           if (verbs && verbs.present) {
             verbs.present.forEach((verb, index) => {
                 // Save each pair as an array [present, past]
@@ -331,8 +345,9 @@ fetch('storyData.json')
             console.error('the verb or present is not defined in the JSON data');
           }
 
-          
-    // get random items
+// Now that we have the data in arrays, we can use them to create random versions of the story.
+
+    // Get random items
         let randomAdj = getRandomItem(adjectives);
         let randomVerbIndex = getRandomIndex(verbs.present);
         let randomPresVerb = verbs.present[randomVerbIndex];
@@ -365,63 +380,60 @@ fetch('storyData.json')
         
 
 // Step 5: Describing the contents of the JSON file with functions.
-// Or rather, we will create functions that return strings of the data.
+//         Or rather, we will create functions that return strings of the data.
 
-        // Display HTML
-        document.getElementById('funct0').innerHTML += williamVersion.getObjectHTML();
-        document.getElementById('funct1a').innerHTML += `Random adjective: <u class="adj">${randomAdj}</u>`;
-        document.getElementById('funct1b').innerHTML += `Random verb pair: <u class="verb">${randomPresVerb}, ${randomPastVerb}</u>`;
-        document.getElementById('funct2').innerHTML += randomVersion.getObjectHTML();
-        document.getElementById('funct3').innerHTML += randomVersion.growNounStr(adjectives);
-        document.getElementById('funct4').innerHTML += randomVersion.getStoryHTML();
-
-
-        // Display in console
-
+// Display in console and HTML
         console.log('');        
         console.log('Step 5: Displaying the contents of the JSON file with functions.');
         console.log('  - The data contains word lists for nouns, adjectives, and verbs and default values for a story.');
         console.log('  - We can use these to along with a class to play something like madLibs!')
 
+        // Display default version of the story
         console.log('  ');
         console.log('First let us make the an instance of the class storyVersion using a set of default values');
         console.log('  Default instance:', williamVersion);
+        document.getElementById('funct0').innerHTML += williamVersion.getObjectHTML();
         console.log('  ');
 
+
+        // Function 1: Randomly select items from the lists
         console.log('Now, let us create an instance of the class by randomly choosing items from the correct word lists');
         console.log('  ');
         console.log('  FUNCTION 1a returns random items from lists');
         console.log('      example usage: getRandomItem(adjectives):', randomAdj);
+        document.getElementById('funct1a').innerHTML += `Random adjective: <u class="adj">${randomAdj}</u>`;
+
 
         console.log('  ');
         console.log('  FUNCTION 1b selects random index number from array');
         console.log('      example usage: getRandomIndex(verbs.present):', randomVerbIndex);
         console.log('      example: verb pair:', randomPresVerb, randomPastVerb);
         console.log('  ');
+        document.getElementById('funct1b').innerHTML += `Random verb pair: <u class="verb">${randomPresVerb}, ${randomPastVerb}</u>`;
+
+
+        // Function 2: Create a random instance of the story
         console.log('  FUNCTION 2 returns an instance of the class storyVersion using the random words');
         console.log('      example usage: getRandomVersion(animateNouns, inanimateNouns, adjectives, verbs):', randomVersion);
-        
         console.log('  ');
+        document.getElementById('funct2').innerHTML += randomVersion.getObjectHTML();
+        
 
+        // Function 3: Add adjectives to the nouns
         console.log('Now that we have a random story, we can use the class methods to manipulate the story.');
         console.log('  FUNCTION 3 adds an adjective in front of each noun: ');
+        randomVersion.growNoun(adjectives);
+        document.getElementById('funct3').innerHTML += randomVersion.growNounStr(adjectives);
 
-        
 
+        // Function 4: Create a story
         console.log('  ');
         console.log('  FUNCTION 4 applies an instance to a template literal, giving us a retelling of The Three Little Pigs.');
-        randomVersion.growNoun(adjectives);
         console.log(randomVersion.getStory());
-
         console.log('  ');
-        console.log('If you would like to try it out, you can! Options are on the webpage.')
-
-
-
-
-     
-    
+        document.getElementById('funct4').innerHTML += randomVersion.getStoryHTML();  
 })    
+
 .catch(error => {
   console.error('Error fetching data:', error);
 });
