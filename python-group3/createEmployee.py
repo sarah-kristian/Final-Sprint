@@ -171,7 +171,7 @@ def create_new_account():
         print(f"|  Driver ID: {DRIVER_NUMBER:<6}                |")
         print("|  Job Title: Driver                |")
         print(f"|  Phone: {PhoneNumberDSP}            |")
-        print(f"|  License No: {DrivLicNum:<9}            |")
+        print(f"|  License No: {DrivLicNum:<10}            |")
         print(f"|  Expiry Date: {LicenseExpiry}          |")
         print("|                                   |")
         print(f"|  Start Date: {StartDateDSP}            |") 

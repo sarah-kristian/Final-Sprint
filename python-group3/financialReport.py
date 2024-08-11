@@ -1,6 +1,7 @@
-# Description:This program generates a profit listing and summary report for a specified date range.
+# Description: This program generates a different financial reports within a specified date range.
+# This includes revenue listing, financial listing, profit listing and summary report.
 # Author: Robot Group 3
-# Date(s): Jul 31 2024 - 
+# Date(s): Jul 31 2024 - Aug 11 2024
  
  
 # define libraries
@@ -292,40 +293,10 @@ def PrintExpSummary(StartDate_dt, EndDate_dt):
 
 
 def GenerateFinancialReport(type):
-    # For testing purposes, use the following hard-coded dates
 
-    # StartDate_dt = convert_to_datetime("2022-01-01")
-    # EndDate_dt = convert_to_datetime("2022-03-05")
-
-    # Get the start and end dates for the report
-    print("\nEnter the date range for the report.\n")
-
-    while True:
-        StartDate_dt = get_date_dt("Enter the start date (YYYY-MM-DD): ")
-        if TODAY < StartDate_dt:
-            print("Start date must be earlier than the current date. Please try again.")
-        else:
-            break
-
-
-    while True:
-        EndDate_dt = get_date_dt("Enter the end date (YYYY-MM-DD): ")
-        if EndDate_dt < StartDate_dt:
-            print("End date must be greater than start date. Please try again.")
-        else:
-            break
-
-    StartDate = FV.FDateM(StartDate_dt)
-    EndDate = FV.FDateM(EndDate_dt)
-
-
-
-
-
-# Set report width
+# print header
     width = int(86)
 
-# Generate report headings
     if "summary" in type:
         print()
         print(f"{'='*width}")
@@ -338,6 +309,31 @@ def GenerateFinancialReport(type):
         print_header("Expenses Listing Report", width)
     elif "profit" in type:
         print_header("Profit Listing Report", width)
+
+
+    # Get the start and end dates for the report
+    print("\nEnter the date range for the report.\n")
+
+    while True:
+        StartDate_dt = get_date_dt("Start date (YYYY-MM-DD): ")
+        if TODAY < StartDate_dt:
+            print("Start date must be earlier than the current date. Please try again.")
+        else:
+            break
+
+
+    while True:
+        EndDate_dt =   get_date_dt("End date (YYYY-MM-DD):   ")
+        if EndDate_dt < StartDate_dt:
+            print("End date must be greater than start date. Please try again.")
+        else:
+            break
+
+    StartDate = FV.FDateM(StartDate_dt)
+    EndDate = FV.FDateM(EndDate_dt)
+
+
+# Generate report headings
 
     RevenueHeader = f"{'Revenue Listing':^{width}}\n"
     ExpensesHeader = f"{'Expense Listing':^{width}}\n"
@@ -362,6 +358,7 @@ def GenerateFinancialReport(type):
 # Display the reports
 
     if "revenue" in type or "profit" in type:
+        print()
         print(RevenueHeader)
         print(DateLine)
         PrintRevRows(RevRows, TransCtr, RevenueAcc)
@@ -372,6 +369,7 @@ def GenerateFinancialReport(type):
     
 
     if "expenses" in type or "profit" in type:
+        print()
         print(ExpensesHeader)
         print(DateLine)
         PrintExpRows(ExpRows, InvCtr, ExpensesAcc)

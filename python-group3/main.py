@@ -4,10 +4,16 @@
 
 
 # import libraries
-from handlers.utility import clear_screen, print_header
+import handlers.utility as util
+
+# import menu functions
 from financialReport import GenerateFinancialReport
 from createEmployee import create_new_account
 from corporateSummary import generate_report
+
+
+# define global variables
+UNDER_CONSTR_MSG = "This function is under construction. Please try again later."
 
 # define funtions
 def draw_car():
@@ -20,41 +26,6 @@ def draw_car():
         """)
     print(car)
     
-
-
-############################################################################################################
-# Define Menu Functions
-############################################################################################################
-
-
-def update_revenues():
-    new_revenue = "This will be revenue info"
-
-    return new_revenue
-
-def update_expenses():
-    new_expense = "This will be expense info"
-
-    return new_expense
-
-def track_rentals():
-    rental_info = "This will be rental info"
-
-    return rental_info
-
-def record_employee_payment():
-    employee_payment = "This will be employee payment info"
-
-    return employee_payment
-
-
-def print_driver_listing():
-    driver_list = "This will be driver listing"
-
-    return driver_list
-
-
-
 
 
 ############################################################################################################
@@ -85,11 +56,11 @@ def menu():
 
 # main loop starts here
     while True:
-        clear_screen()
+        util.clear_screen()
     # initialize variables
         opt_num = 0
     # Display Menu
-        print_header(header_msg, width)
+        util.print_header(header_msg, width)
         for option in options:
             opt_num += 1
             print(f"{' '*10}{opt_num}. {option}")
@@ -100,30 +71,17 @@ def menu():
     # User inputs        
         choice = input("\nWhich menu option would you like to run (1-9)?: ").strip()
 
-    # Calculations (function selector)    
-        if choice == '1':
-            clear_screen()
+    # Calculations (function selector)  
+        if choice in ['2', '3', '4', '5', '7']:
+            print(UNDER_CONSTR_MSG)  
+        elif choice == '1':
+            util.clear_screen()
             create_new_account()
-        elif choice == '2':
-            clear_screen()
-            update_revenues()
-        elif choice == '3':
-            clear_screen()
-            update_expenses()
-        elif choice == '4':
-            clear_screen()
-            track_rentals()
-        elif choice == '5':
-            clear_screen()
-            record_employee_payment()
         elif choice == '6':
-            clear_screen()
+            util.clear_screen()
             GenerateFinancialReport("profit")
-        elif choice == '7':
-            clear_screen()
-            print_driver_listing()
         elif choice == '8':
-            clear_screen()
+            util.clear_screen()
             generate_report()
         elif choice == '9':
             print()
@@ -136,7 +94,6 @@ def menu():
         
 
     # Housekeeping
-        print()
         print()
         go_on = input("\nWould you like to run another program (Y/N)  ").lower().strip()
         if go_on == "n" or go_on == "no":
