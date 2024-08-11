@@ -98,6 +98,8 @@ def menu():
         go_on = input("\nWould you like to run another program (Y/N)  ").lower().strip()
         if go_on == "n" or go_on == "no":
             print()
+            print()
+            print()
             print("         Have a great day!")
             draw_car()
 
