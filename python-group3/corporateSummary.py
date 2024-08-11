@@ -77,11 +77,11 @@ def print_employee_report():
         balance = float(line[-1])
 
 
-    # calculate number of employees by city
-        if city in city_dict:
-            city_dict[city] += 1
-        else:
-            city_dict[city] = 1
+    # # calculate number of employees by city
+    #     if city in city_dict:
+    #         city_dict[city] += 1
+    #     else:
+    #         city_dict[city] = 1
 
     # calculate number of employees by insurance company
         if insurance_company in ins_company_dict:
@@ -123,22 +123,23 @@ def print_employee_report():
     print(f"{'=' * width}")
 
     print()
-    print(f"Total Number of Employees: {num_employees}")
-    print(f"Drivers with Own Cars: {num_own_car}")
-    print(f"Drivers Using Company Cars: {num_company_car}")
+    print(f"Total Number of Employees:   {num_employees}")
+    print(f"Drivers with their Own Cars:  {num_own_car}")
+    print(f"Drivers Using Company Cars:   {num_company_car}")
     print()
     print(f"Employees with balance owing: {num_bal_due}")
-    print(f"Average Balance Due: ${avg_bal_due:,.2f}")
-    print(f"Highest Balance Due: ${highest_bal_due:,.2f}")
-    print(f"Lowest Balance Due: ${lowest_bal_due:,.2f}")
+    print(f"    Average Balance Due: ${avg_bal_due:,.2f}")
+    print(f"    Highest Balance Due: ${highest_bal_due:,.2f}")
+    print(f"    Lowest Balance Due:  ${lowest_bal_due:,.2f}")
 
-    print("\nEmployees by City:")
-    for city, count in city_dict.items():
-        print(f"    {city}: {count}")
+    #print("\nEmployees by City:")
+    #for city, count in city_dict.items():
+    #    print(f"    {city}: {count}")
 
     print("\nEmployees by Insurance Company:")
     for company, count in ins_company_dict.items():
-        print(f"    {company}: {count}")
+        print(f"    {company:<20}: {count}")
+
 
 
     print("\nDrivers with highest balance:")
