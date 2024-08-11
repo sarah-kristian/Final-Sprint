@@ -248,19 +248,19 @@ def PrintRevSummary(StartDate_dt, EndDate_dt):
     Top3_Rev = dict(sorted(RevByDriver.items(), key=lambda item: item[1], reverse=True)[:3])
     Bottom3_Rev = dict(sorted(RevByDriver.items(), key=lambda item: item[1])[:3])
 
-    print(f"Monthly Stand Fees: {StandFeesCtr} transactions, Total Amount: {FV.FDollar2(StandFeesAcc):>11s}")
-    print(f"Car Rental        : {CarRentalCtr} transactions, Total Amount: {FV.FDollar2(CarRentalAcc):>11s}")
-    print(f"Service Fees      : {ServiceFeesCtr} transactions, Total Amount: {FV.FDollar2(ServiceFeesAcc):>11s}")
-    print(f"Product Sales     : {ProductSalesCtr} transactions, Total Amount: {FV.FDollar2(ProductSalesAcc):>11s}")
+    print(f"Monthly Stand Fees: {StandFeesCtr:>2} transactions, Total Amount: {FV.FDollar2(StandFeesAcc):>11s}")
+    print(f"Car Rental        : {CarRentalCtr:>2} transactions, Total Amount: {FV.FDollar2(CarRentalAcc):>11s}")
+    #print(f"Service Fees      : {ServiceFeesCtr:>2} transactions, Total Amount: {FV.FDollar2(ServiceFeesAcc):>11s}")
+    print(f"Product Sales     : {ProductSalesCtr:>2} transactions, Total Amount: {FV.FDollar2(ProductSalesAcc):>11s}")
     print()
 
-    print("Top Drivers by Revenue:")
+    print("Drivers paying highest revenues:")
     for driver, revenue in Top3_Rev.items():
-        print(f"    {driver}: ${revenue}")
+        print(f"    {driver}: {FV.FDollar2(revenue):>10s}")
     
-    print("\nBottom Drivers by Revenue:")
+    print("\nDrivers paying lowest revenues:")
     for driver, revenue in Bottom3_Rev.items():
-        print(f"    {driver}: ${revenue}")
+        print(f"    {driver}: {FV.FDollar2(revenue):>10s}")
 
 
 def PrintExpSummary(StartDate_dt, EndDate_dt):
@@ -274,10 +274,10 @@ def PrintExpSummary(StartDate_dt, EndDate_dt):
     #Bottom3_Exp = dict(sorted(ExpByCat.items(), key=lambda item: item[1])[:3])
 
     # print summary lines
-    print(f"Repair parts: {TireChangeCtr} invoices, Total Amount: {FV.FDollar2(TireChangeAcc):>11s}")
-    print(f"Oil change  : {OilChangeCtr} invoices, Total Amount: {FV.FDollar2(OilChangeAcc):>11s}")
-    print(f"Inspection  : {InspectionCtr} invoices, Total Amount: {FV.FDollar2(InspectionAcc):>11s}")
-    print(f"Other       : {OtherExpensesCtr} invoices, Total Amount: {FV.FDollar2(OtherExpensesAcc):>11s}")
+    print(f"Repair parts: {TireChangeCtr:>2} invoices, Total Amount: {FV.FDollar2(TireChangeAcc):>11s}")
+    print(f"Oil change  : {OilChangeCtr:>2} invoices, Total Amount: {FV.FDollar2(OilChangeAcc):>11s}")
+    print(f"Inspection  : {InspectionCtr:>2} invoices, Total Amount: {FV.FDollar2(InspectionAcc):>11s}")
+    print(f"Other       : {OtherExpensesCtr:>2} invoices, Total Amount: {FV.FDollar2(OtherExpensesAcc):>11s}")
 
 
     print("\nTop Expenses by Category:")
@@ -389,4 +389,4 @@ def GenerateFinancialReport(type):
 
 
 if __name__ == "__main__":
-    GenerateFinancialReport("profit")
+    GenerateFinancialReport("profit summary")
