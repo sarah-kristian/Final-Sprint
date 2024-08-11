@@ -6,7 +6,7 @@
 # import libraries
 from handlers.utility import clear_screen, print_header
 from financialReport import GenerateFinancialReport
-from HABEmployee import create_new_account
+from createEmployee import create_new_account
 from corporateSummary import generate_report
 
 # define funtions
